@@ -18,6 +18,7 @@ Route::post('/admin/register', [AdminAuthController::class, 'register']);
 Route::post('/admin/login', [AdminAuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/admin/me', [AdminController::class, 'profile']);
     Route::get('/admins', [AdminController::class, 'index']);
     Route::get('/admins/count', [AdminController::class, 'count']);
     Route::get('/admins/pharmacies-count', [AdminController::class, 'pharmaciesCount']);

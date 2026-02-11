@@ -11,6 +11,7 @@ use App\Models\Admin;
 use App\Models\Region;
 use App\Models\Pharmacy;
 use App\Models\Warehouse;
+use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
@@ -22,6 +23,26 @@ class AdminController extends Controller
             ->get();
 
         return response()->json($admins);
+    }
+
+    // GET /api/admin/me
+    public function profile(Request $request)
+    {
+        $admin = $request->user();
+
+        if (!$admin) {
+            return response()->json([
+                'message' => 'Unauthenticated.',
+            ], 401);
+        }
+
+        $admin->load([
+            'region:id,name',
+            'pharmacies',
+            'warehouse',
+        ]);
+
+        return response()->json($admin);
     }
 
     // GET /api/admins/count
@@ -114,4 +135,5 @@ class AdminController extends Controller
             'admin' => $admin,
         ]);
     }
+    
 }
