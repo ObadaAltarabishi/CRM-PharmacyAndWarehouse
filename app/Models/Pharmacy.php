@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
-class Pharmacy extends Model
+class Pharmacy extends Authenticatable
 {
+    use HasApiTokens, Notifiable;
+
     protected $fillable = [
         'pharmacy_name',
         'doctor_name',

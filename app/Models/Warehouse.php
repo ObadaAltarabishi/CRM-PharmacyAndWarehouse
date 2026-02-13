@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
-class Warehouse extends Model
+class Warehouse extends Authenticatable
 {
+    use HasApiTokens, Notifiable;
+
     protected $table = 'warehouse';
 
     protected $fillable = [

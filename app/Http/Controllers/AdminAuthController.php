@@ -20,7 +20,7 @@ class AdminAuthController extends Controller
 
         $admin = Admin::create($data);
 
-        $token = $admin->createToken('admin-token')->plainTextToken;
+        $token = $admin->createToken('admin-token', ['admin'])->plainTextToken;
 
         return response()->json([
             'admin' => $admin,
@@ -42,7 +42,7 @@ class AdminAuthController extends Controller
             ]);
         }
 
-        $token = $admin->createToken('admin-token')->plainTextToken;
+        $token = $admin->createToken('admin-token', ['admin'])->plainTextToken;
 
         return response()->json([
             'admin' => $admin,
