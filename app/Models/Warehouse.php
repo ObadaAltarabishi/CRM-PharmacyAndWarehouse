@@ -40,5 +40,14 @@ class Warehouse extends Authenticatable
     
     public function region() { return $this->belongsTo(Region::class); }
 
+    public function products()
+    {
+        return $this->hasMany(WarehouseProduct::class);
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
 
 }

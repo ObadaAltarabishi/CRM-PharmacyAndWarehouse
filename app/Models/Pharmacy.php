@@ -43,4 +43,29 @@ class Pharmacy extends Authenticatable
     {
         return $this->belongsTo(Region::class);
     }
+
+    public function products()
+    {
+        return $this->hasMany(PharmacyProduct::class);
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function salesInvoices()
+    {
+        return $this->hasMany(SalesInvoice::class);
+    }
+
+    public function salesCart()
+    {
+        return $this->hasOne(SalesCart::class);
+    }
+
+    public function orderCart()
+    {
+        return $this->hasOne(OrderCart::class);
+    }
 }
