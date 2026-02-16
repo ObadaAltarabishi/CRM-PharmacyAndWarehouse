@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreOrderCartItemRequest;
+use App\Http\Requests\UpdateOrderCartItemQuantityRequest;
 use App\Models\Order;
 use App\Models\OrderCart;
 use App\Models\OrderCartItem;
@@ -200,6 +201,104 @@ class PharmacyOrderCartController extends Controller
             'message' => 'Order created.',
             'order' => $order,
         ], 201);
+    }
+
+    public function removeItem(string $barcode): JsonResponse
+    {
+        $pharmacy = request()->user();
+
+        $cart = OrderCart::query()
+            ->where('pharmacy_id', $pharmacy->id)
+            ->first();
+
+        if (!$cart) {
+            return response()->json(['message' => 'Cart is empty.'], 422);
+        }
+
+        $product = Product::query()
+            ->where('barcode', $barcode)
+            ->first();
+
+        if (!$product) {
+            return response()->json([
+                'message' => 'Product not found for barcode.',
+                'barcode' => $barcode,
+            ], 404);
+        }
+
+        $item = OrderCartItem::query()
+            ->where('order_cart_id', $cart->id)
+            ->where('product_id', $product->id)
+            ->first();
+
+        if (!$item) {
+            return response()->json([
+                'message' => 'Item not found in cart.',
+                'barcode' => $barcode,
+            ], 404);
+        }
+
+        $item->delete();
+
+        $cart->load('items.product', 'warehouse:id,warehouse_name');
+
+        return response()->json($this->cartResponse($cart));
+    }
+
+    public function updateQuantity(string $barcode, UpdateOrderCartItemQuantityRequest $request): JsonResponse
+    {
+        $pharmacy = $request->user();
+        $data = $request->validated();
+
+        $cart = OrderCart::query()
+            ->where('pharmacy_id', $pharmacy->id)
+            ->first();
+
+        if (!$cart) {
+            return response()->json(['message' => 'Cart is empty.'], 422);
+        }
+
+        $product = Product::query()
+            ->where('barcode', $barcode)
+            ->first();
+
+        if (!$product) {
+            return response()->json([
+                'message' => 'Product not found for barcode.',
+                'barcode' => $barcode,
+            ], 404);
+        }
+
+        $item = OrderCartItem::query()
+            ->where('order_cart_id', $cart->id)
+            ->where('product_id', $product->id)
+            ->first();
+
+        if (!$item) {
+            return response()->json([
+                'message' => 'Item not found in cart.',
+                'barcode' => $barcode,
+            ], 404);
+        }
+
+        $warehouseProduct = WarehouseProduct::query()
+            ->where('warehouse_id', $cart->warehouse_id)
+            ->where('product_id', $product->id)
+            ->first();
+
+        if (!$warehouseProduct || $warehouseProduct->quantity < (int) $data['quantity']) {
+            return response()->json([
+                'message' => 'Insufficient stock in warehouse.',
+                'barcode' => $barcode,
+            ], 422);
+        }
+
+        $item->quantity = (int) $data['quantity'];
+        $item->save();
+
+        $cart->load('items.product', 'warehouse:id,warehouse_name');
+
+        return response()->json($this->cartResponse($cart));
     }
 
     private function cartResponse(OrderCart $cart): array

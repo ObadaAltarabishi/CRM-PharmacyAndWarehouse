@@ -66,10 +66,27 @@ class PharmacyInventoryController extends Controller
             ->first();
 
         if (!$product) {
-            return response()->json([
-                'message' => 'Product not found for barcode.',
+            $missing = [];
+            foreach (['name', 'strength', 'company_name'] as $field) {
+                if (empty($data[$field])) {
+                    $missing[] = $field;
+                }
+            }
+
+            if (!empty($missing)) {
+                return response()->json([
+                    'message' => 'Missing product data.',
+                    'missing_fields' => $missing,
+                ], 422);
+            }
+
+            $product = Product::create([
                 'barcode' => $data['barcode'],
-            ], 404);
+                'name' => $data['name'],
+                'strength' => $data['strength'],
+                'company_name' => $data['company_name'],
+                'form' => $data['form'] ?? null,
+            ]);
         }
 
         $defaultSellPrice = Pricing::applyMarkup((float) $data['cost_price']);

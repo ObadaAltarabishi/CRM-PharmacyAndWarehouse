@@ -17,6 +17,10 @@ class StorePharmacyProductRequest extends FormRequest
             'barcode' => ['required', 'string', 'max:100'],
             'quantity' => ['required', 'integer', 'min:0'],
             'cost_price' => ['required', 'numeric', 'min:0'],
+            'name' => ['nullable', 'string', 'max:255'],
+            'strength' => ['nullable', 'string', 'max:255'],
+            'company_name' => ['nullable', 'string', 'max:255'],
+            'form' => ['nullable', 'string', 'max:255'],
         ];
     }
 }
