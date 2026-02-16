@@ -75,16 +75,16 @@ Route::middleware(['auth:sanctum', 'abilities:pharmacy'])->group(function () {
     Route::post('/pharmacy/sales-cart/checkout', [PharmacySalesCartController::class, 'checkout']);
     Route::get('/pharmacy/order-cart', [PharmacyOrderCartController::class, 'show']);
     Route::post('/pharmacy/order-cart/items', [PharmacyOrderCartController::class, 'addItem']);
-    Route::delete('/pharmacy/order-cart/items/{barcode}', [PharmacyOrderCartController::class, 'removeItem']);
-    Route::patch('/pharmacy/order-cart/items/{barcode}', [PharmacyOrderCartController::class, 'updateQuantity']);
     Route::post('/pharmacy/order-cart/checkout', [PharmacyOrderCartController::class, 'checkout']);
     Route::get('/pharmacy/stats/summary', [PharmacyStatsController::class, 'summary']);
-
+    //Route::get('/products/barcode/{barcode}', [ProductController::class, 'showByBarcode']);
     Route::post('/products', [ProductController::class, 'store']);
 });
+
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/products/barcode/{barcode}', [ProductController::class, 'showByBarcode']);
 });
+
 
 
 
@@ -97,6 +97,7 @@ Route::middleware(['auth:sanctum', 'abilities:warehouse'])->group(function () {
     Route::post('/warehouse/orders/{order}/approve', [WarehouseOrderController::class, 'approve']);
     Route::post('/warehouse/orders/{order}/reject', [WarehouseOrderController::class, 'reject']);
     Route::get('/warehouse/stats/summary', [WarehouseStatsController::class, 'summary']);
+    //Route::get('/products/barcode/{barcode}', [ProductController::class, 'showByBarcode']);
     Route::post('/products', [ProductController::class, 'store']);
 });
 
