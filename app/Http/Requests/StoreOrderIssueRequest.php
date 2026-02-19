@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CheckoutSalesCartRequest extends FormRequest
+class StoreOrderIssueRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -14,7 +14,7 @@ class CheckoutSalesCartRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'paid_total' => ['required', 'numeric', 'min:0'],
+            'content' => ['required', 'string', 'max:2000'],
         ];
     }
 }

@@ -12,6 +12,32 @@ use Illuminate\Support\Facades\DB;
 
 class SalesInvoiceController extends Controller
 {
+    public function index(): JsonResponse
+    {
+        $pharmacy = request()->user();
+
+        $invoices = SalesInvoice::query()
+            ->where('pharmacy_id', $pharmacy->id)
+            ->with(['items.product'])
+            ->latest()
+            ->get();
+
+        return response()->json($invoices);
+    }
+
+    public function show(SalesInvoice $salesInvoice): JsonResponse
+    {
+        $pharmacy = request()->user();
+
+        if ($salesInvoice->pharmacy_id !== $pharmacy->id) {
+            return response()->json(['message' => 'Unauthorized.'], 403);
+        }
+
+        $salesInvoice->load(['items.product']);
+
+        return response()->json($salesInvoice);
+    }
+
     public function store(StoreSalesInvoiceRequest $request): JsonResponse
     {
         $pharmacy = $request->user();

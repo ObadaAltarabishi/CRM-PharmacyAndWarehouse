@@ -9,6 +9,8 @@ class SalesInvoice extends Model
     protected $fillable = [
         'pharmacy_id',
         'total_price',
+        'paid_total',
+        'discount_percent',
     ];
 
     public function pharmacy()

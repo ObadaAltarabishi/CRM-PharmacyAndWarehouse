@@ -17,7 +17,20 @@ class WarehouseInventoryController extends Controller
             ->with('product')
             ->get();
 
-        return response()->json($products);
+        $response = $products->map(function (WarehouseProduct $item) {
+            $available = max(0, $item->quantity - $item->reserved_quantity);
+
+            return [
+                'id' => $item->id,
+                'warehouse_id' => $item->warehouse_id,
+                'product_id' => $item->product_id,
+                'available_quantity' => $available,
+                'sell_price_to_pharmacy' => $item->sell_price_to_pharmacy,
+                'product' => $item->product,
+            ];
+        });
+
+        return response()->json($response);
     }
 
     public function index(): JsonResponse

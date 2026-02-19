@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CheckoutSalesCartRequest;
+use App\Http\Requests\ConfirmSalesCartCheckoutRequest;
 use App\Http\Requests\StoreSalesCartItemRequest;
 use App\Http\Requests\UpdateSalesCartItemQuantityRequest;
 use App\Models\PharmacyProduct;
@@ -32,6 +33,7 @@ class PharmacySalesCartController extends Controller
     {
         $pharmacy = $request->user();
         $data = $request->validated();
+        $quantity = 1;
 
         $product = Product::query()
             ->where('barcode', $data['barcode'])
@@ -65,7 +67,7 @@ class PharmacySalesCartController extends Controller
             ->first();
 
         if ($item) {
-            $newQuantity = $item->quantity + (int) $data['quantity'];
+            $newQuantity = $item->quantity + $quantity;
             if ($pharmacyProduct->quantity < $newQuantity) {
                 return response()->json([
                     'message' => 'Insufficient stock in pharmacy.',
@@ -76,7 +78,7 @@ class PharmacySalesCartController extends Controller
             $item->quantity = $newQuantity;
             $item->save();
         } else {
-            if ($pharmacyProduct->quantity < (int) $data['quantity']) {
+            if ($pharmacyProduct->quantity < $quantity) {
                 return response()->json([
                     'message' => 'Insufficient stock in pharmacy.',
                     'barcode' => $data['barcode'],
@@ -86,7 +88,7 @@ class PharmacySalesCartController extends Controller
             SalesCartItem::create([
                 'sales_cart_id' => $cart->id,
                 'product_id' => $product->id,
-                'quantity' => (int) $data['quantity'],
+                'quantity' => $quantity,
             ]);
         }
 
@@ -114,32 +116,44 @@ class PharmacySalesCartController extends Controller
             return response()->json(['message' => 'Cart is empty.'], 422);
         }
 
-        $pricesByBarcode = [];
-        foreach ($data['items'] as $item) {
-            $pricesByBarcode[$item['barcode']] = (float) $item['unit_price'];
-        }
+        $total = $this->calculateCartTotal($pharmacy->id, $cart);
+        $paidTotal = (float) $data['paid_total'];
 
-        foreach ($cart->items as $cartItem) {
-            $barcode = $cartItem->product->barcode;
-            if (!array_key_exists($barcode, $pricesByBarcode)) {
+        if ($total > 0 && $paidTotal < $total) {
+            $discountPercent = (($total - $paidTotal) / $total) * 100;
+
+            if ($discountPercent >= 20) {
+                $cart->pending_paid_total = $paidTotal;
+                $cart->save();
+
                 return response()->json([
-                    'message' => 'Missing price for barcode.',
-                    'barcode' => $barcode,
+                    'message' => 'Discount is 20% or more. Confirm to proceed.',
+                    'total_price' => $total,
+                    'paid_total' => $paidTotal,
+                    'discount_percent' => $discountPercent,
+                    'requires_confirmation' => true,
                 ], 422);
             }
         }
 
         try {
-            $invoice = DB::transaction(function () use ($pharmacy, $cart, $pricesByBarcode) {
+            $invoice = DB::transaction(function () use ($pharmacy, $cart, $data) {
             $total = 0;
             $invoice = SalesInvoice::create([
                 'pharmacy_id' => $pharmacy->id,
                 'total_price' => 0,
+                'paid_total' => (float) $data['paid_total'],
+                'discount_percent' => 0,
             ]);
 
             foreach ($cart->items as $cartItem) {
-                $barcode = $cartItem->product->barcode;
-                $unitPrice = $pricesByBarcode[$barcode];
+                $pharmacyProduct = PharmacyProduct::query()
+                    ->where('pharmacy_id', $pharmacy->id)
+                    ->where('product_id', $cartItem->product_id)
+                    ->lockForUpdate()
+                    ->first();
+
+                $unitPrice = $pharmacyProduct ? (float) $pharmacyProduct->default_sell_price : 0;
                 $lineTotal = $unitPrice * $cartItem->quantity;
                 $total += $lineTotal;
 
@@ -151,11 +165,96 @@ class PharmacySalesCartController extends Controller
                     'line_total' => $lineTotal,
                 ]);
 
+                if (!$pharmacyProduct || $pharmacyProduct->quantity < $cartItem->quantity) {
+                    throw new \RuntimeException('Insufficient stock during checkout.');
+                }
+
+                $pharmacyProduct->quantity -= $cartItem->quantity;
+                $pharmacyProduct->save();
+            }
+
+            $paidTotal = (float) $data['paid_total'];
+            $discountPercent = $total > 0 ? (($total - $paidTotal) / $total) * 100 : 0;
+
+            $invoice->total_price = $total;
+            $invoice->discount_percent = $discountPercent;
+            $invoice->save();
+
+            SalesCartItem::query()
+                ->where('sales_cart_id', $cart->id)
+                ->delete();
+
+            return $invoice;
+        });
+        } catch (\RuntimeException $exception) {
+            return response()->json([
+                'message' => $exception->getMessage(),
+            ], 422);
+        }
+
+        $invoice->load('items.product');
+
+        return response()->json([
+            'message' => 'Sale recorded.',
+            'invoice' => $invoice,
+        ], 201);
+    }
+
+    public function confirmCheckout(ConfirmSalesCartCheckoutRequest $request): JsonResponse
+    {
+        $pharmacy = $request->user();
+        $data = $request->validated();
+
+        $cart = SalesCart::query()
+            ->where('pharmacy_id', $pharmacy->id)
+            ->first();
+
+        if (!$cart) {
+            return response()->json(['message' => 'Cart is empty.'], 422);
+        }
+
+        $cart->load('items.product');
+
+        if ($cart->items->isEmpty()) {
+            return response()->json(['message' => 'Cart is empty.'], 422);
+        }
+
+        $paidTotal = $data['paid_total'] ?? $cart->pending_paid_total;
+
+        if ($paidTotal === null) {
+            return response()->json([
+                'message' => 'Missing paid_total for confirmation.',
+            ], 422);
+        }
+
+        try {
+            $invoice = DB::transaction(function () use ($pharmacy, $cart, $paidTotal) {
+            $total = 0;
+            $invoice = SalesInvoice::create([
+                'pharmacy_id' => $pharmacy->id,
+                'total_price' => 0,
+                'paid_total' => (float) $paidTotal,
+                'discount_percent' => 0,
+            ]);
+
+            foreach ($cart->items as $cartItem) {
                 $pharmacyProduct = PharmacyProduct::query()
                     ->where('pharmacy_id', $pharmacy->id)
                     ->where('product_id', $cartItem->product_id)
                     ->lockForUpdate()
                     ->first();
+
+                $unitPrice = $pharmacyProduct ? (float) $pharmacyProduct->default_sell_price : 0;
+                $lineTotal = $unitPrice * $cartItem->quantity;
+                $total += $lineTotal;
+
+                SalesInvoiceItem::create([
+                    'sales_invoice_id' => $invoice->id,
+                    'product_id' => $cartItem->product_id,
+                    'quantity' => $cartItem->quantity,
+                    'unit_price' => $unitPrice,
+                    'line_total' => $lineTotal,
+                ]);
 
                 if (!$pharmacyProduct || $pharmacyProduct->quantity < $cartItem->quantity) {
                     throw new \RuntimeException('Insufficient stock during checkout.');
@@ -165,12 +264,18 @@ class PharmacySalesCartController extends Controller
                 $pharmacyProduct->save();
             }
 
+            $discountPercent = $total > 0 ? (($total - $paidTotal) / $total) * 100 : 0;
+
             $invoice->total_price = $total;
+            $invoice->discount_percent = $discountPercent;
             $invoice->save();
 
             SalesCartItem::query()
                 ->where('sales_cart_id', $cart->id)
                 ->delete();
+
+            $cart->pending_paid_total = null;
+            $cart->save();
 
             return $invoice;
         });
@@ -286,6 +391,27 @@ class PharmacySalesCartController extends Controller
         return response()->json($this->cartResponse($pharmacy->id, $cart));
     }
 
+    public function clear(): JsonResponse
+    {
+        $pharmacy = request()->user();
+
+        $cart = SalesCart::query()
+            ->where('pharmacy_id', $pharmacy->id)
+            ->first();
+
+        if (!$cart) {
+            return response()->json(['message' => 'Cart is empty.'], 422);
+        }
+
+        SalesCartItem::query()
+            ->where('sales_cart_id', $cart->id)
+            ->delete();
+
+        $cart->delete();
+
+        return response()->json(['message' => 'Cart cleared.']);
+    }
+
     private function cartResponse(int $pharmacyId, SalesCart $cart): array
     {
         $items = [];
@@ -318,5 +444,22 @@ class PharmacySalesCartController extends Controller
             'items' => $items,
             'total' => $total,
         ];
+    }
+
+    private function calculateCartTotal(int $pharmacyId, SalesCart $cart): float
+    {
+        $total = 0;
+
+        foreach ($cart->items as $item) {
+            $pharmacyProduct = PharmacyProduct::query()
+                ->where('pharmacy_id', $pharmacyId)
+                ->where('product_id', $item->product_id)
+                ->first();
+
+            $defaultSellPrice = $pharmacyProduct ? (float) $pharmacyProduct->default_sell_price : 0;
+            $total += $defaultSellPrice * $item->quantity;
+        }
+
+        return $total;
     }
 }

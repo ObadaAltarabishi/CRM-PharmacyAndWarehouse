@@ -15,7 +15,6 @@ class StoreSalesCartItemRequest extends FormRequest
     {
         return [
             'barcode' => ['required', 'string', 'max:100'],
-            'quantity' => ['required', 'integer', 'min:1'],
         ];
     }
 }

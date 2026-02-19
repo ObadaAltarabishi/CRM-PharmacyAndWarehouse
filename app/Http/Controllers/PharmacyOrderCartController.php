@@ -55,7 +55,11 @@ class PharmacyOrderCartController extends Controller
             ->where('product_id', $product->id)
             ->first();
 
-        if (!$warehouseProduct || $warehouseProduct->quantity < (int) $data['quantity']) {
+        $available = $warehouseProduct
+            ? max(0, $warehouseProduct->quantity - $warehouseProduct->reserved_quantity)
+            : 0;
+
+        if (!$warehouseProduct || $available < (int) $data['quantity']) {
             return response()->json([
                 'message' => 'Insufficient stock in warehouse.',
                 'barcode' => $data['barcode'],
@@ -87,7 +91,7 @@ class PharmacyOrderCartController extends Controller
 
         if ($item) {
             $newQuantity = $item->quantity + (int) $data['quantity'];
-            if ($warehouseProduct->quantity < $newQuantity) {
+            if ($available < $newQuantity) {
                 return response()->json([
                     'message' => 'Insufficient stock in warehouse.',
                     'barcode' => $data['barcode'],
@@ -136,7 +140,11 @@ class PharmacyOrderCartController extends Controller
                     ->lockForUpdate()
                     ->first();
 
-                if (!$warehouseProduct || $warehouseProduct->quantity < $item->quantity) {
+                $available = $warehouseProduct
+                    ? max(0, $warehouseProduct->quantity - $warehouseProduct->reserved_quantity)
+                    : 0;
+
+                if (!$warehouseProduct || $available < $item->quantity) {
                     return [
                         'ok' => false,
                         'message' => 'Insufficient stock in warehouse.',
@@ -158,6 +166,9 @@ class PharmacyOrderCartController extends Controller
                     ->where('product_id', $item->product_id)
                     ->lockForUpdate()
                     ->first();
+
+                $warehouseProduct->reserved_quantity += $item->quantity;
+                $warehouseProduct->save();
 
                 $unitCost = (float) $warehouseProduct->sell_price_to_pharmacy;
                 $lineTotal = $unitCost * $item->quantity;
@@ -299,6 +310,27 @@ class PharmacyOrderCartController extends Controller
         $cart->load('items.product', 'warehouse:id,warehouse_name');
 
         return response()->json($this->cartResponse($cart));
+    }
+
+    public function clear(): JsonResponse
+    {
+        $pharmacy = request()->user();
+
+        $cart = OrderCart::query()
+            ->where('pharmacy_id', $pharmacy->id)
+            ->first();
+
+        if (!$cart) {
+            return response()->json(['message' => 'Cart is empty.'], 422);
+        }
+
+        OrderCartItem::query()
+            ->where('order_cart_id', $cart->id)
+            ->delete();
+
+        $cart->delete();
+
+        return response()->json(['message' => 'Cart cleared.']);
     }
 
     private function cartResponse(OrderCart $cart): array

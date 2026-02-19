@@ -10,6 +10,7 @@ class WarehouseProduct extends Model
         'warehouse_id',
         'product_id',
         'quantity',
+        'reserved_quantity',
         'cost_price',
         'sell_price_to_pharmacy',
     ];

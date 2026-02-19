@@ -12,6 +12,7 @@ class Feedback extends Model
         'content',
         'pharmacy_id',
         'warehouse_id',
+        'order_id',
     ];
 
     public function pharmacy()
@@ -22,5 +23,10 @@ class Feedback extends Model
     public function warehouse()
     {
         return $this->belongsTo(Warehouse::class);
+    }
+
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
     }
 }
