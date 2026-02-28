@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\ExpenseInvoice;
 use App\Models\SalesInvoice;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -33,15 +34,32 @@ class PharmacyStatsController extends Controller
             ->where('created_at', '>=', $monthStart)
             ->sum('total_price');
 
-        $dailyExpenses = (clone $expensesBase)
+        $purchaseDaily = (clone $expensesBase)
             ->whereDate('approved_at', $today)
             ->sum('total_cost');
-        $weeklyExpenses = (clone $expensesBase)
+        $purchaseWeekly = (clone $expensesBase)
             ->where('approved_at', '>=', $weekStart)
             ->sum('total_cost');
-        $monthlyExpenses = (clone $expensesBase)
+        $purchaseMonthly = (clone $expensesBase)
             ->where('approved_at', '>=', $monthStart)
             ->sum('total_cost');
+
+        $expenseDaily = ExpenseInvoice::query()
+            ->where('pharmacy_id', $pharmacy->id)
+            ->whereDate('created_at', $today)
+            ->sum('amount');
+        $expenseWeekly = ExpenseInvoice::query()
+            ->where('pharmacy_id', $pharmacy->id)
+            ->where('created_at', '>=', $weekStart)
+            ->sum('amount');
+        $expenseMonthly = ExpenseInvoice::query()
+            ->where('pharmacy_id', $pharmacy->id)
+            ->where('created_at', '>=', $monthStart)
+            ->sum('amount');
+
+        $dailyExpenses = $purchaseDaily + $expenseDaily;
+        $weeklyExpenses = $purchaseWeekly + $expenseWeekly;
+        $monthlyExpenses = $purchaseMonthly + $expenseMonthly;
 
         return response()->json([
             'daily' => [

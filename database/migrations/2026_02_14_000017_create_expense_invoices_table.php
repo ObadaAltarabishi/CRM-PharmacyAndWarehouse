@@ -8,20 +8,27 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('sales_invoices', function (Blueprint $table) {
+        Schema::create('expense_invoices', function (Blueprint $table) {
             $table->id();
             $table->foreignId('pharmacy_id')
+                ->nullable()
                 ->constrained('pharmacies')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->decimal('total_price', 12, 4)->default(0);
-            $table->text('feedback')->nullable();
+            $table->foreignId('warehouse_id')
+                ->nullable()
+                ->constrained('warehouse')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+            $table->decimal('amount', 12, 4);
+            $table->string('created_by_name');
+            $table->string('description');
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('sales_invoices');
+        Schema::dropIfExists('expense_invoices');
     }
 };

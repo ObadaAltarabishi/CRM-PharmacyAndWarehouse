@@ -4,14 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class SalesInvoice extends Model
+class ExpenseInvoice extends Model
 {
     protected $fillable = [
         'pharmacy_id',
-        'total_price',
-        'paid_total',
-        'discount_percent',
-        'feedback',
+        'warehouse_id',
+        'amount',
+        'created_by_name',
+        'description',
     ];
 
     public function pharmacy()
@@ -19,8 +19,8 @@ class SalesInvoice extends Model
         return $this->belongsTo(Pharmacy::class);
     }
 
-    public function items()
+    public function warehouse()
     {
-        return $this->hasMany(SalesInvoiceItem::class);
+        return $this->belongsTo(Warehouse::class);
     }
 }

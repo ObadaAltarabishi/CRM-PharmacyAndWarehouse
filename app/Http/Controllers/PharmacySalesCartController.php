@@ -124,6 +124,7 @@ class PharmacySalesCartController extends Controller
 
             if ($discountPercent >= 20) {
                 $cart->pending_paid_total = $paidTotal;
+                $cart->pending_feedback = $data['feedback'] ?? null;
                 $cart->save();
 
                 return response()->json([
@@ -144,6 +145,7 @@ class PharmacySalesCartController extends Controller
                 'total_price' => 0,
                 'paid_total' => (float) $data['paid_total'],
                 'discount_percent' => 0,
+                'feedback' => $data['feedback'] ?? null,
             ]);
 
             foreach ($cart->items as $cartItem) {
@@ -220,6 +222,7 @@ class PharmacySalesCartController extends Controller
         }
 
         $paidTotal = $data['paid_total'] ?? $cart->pending_paid_total;
+        $feedback = $data['feedback'] ?? $cart->pending_feedback;
 
         if ($paidTotal === null) {
             return response()->json([
@@ -228,13 +231,14 @@ class PharmacySalesCartController extends Controller
         }
 
         try {
-            $invoice = DB::transaction(function () use ($pharmacy, $cart, $paidTotal) {
+            $invoice = DB::transaction(function () use ($pharmacy, $cart, $paidTotal, $feedback) {
             $total = 0;
             $invoice = SalesInvoice::create([
                 'pharmacy_id' => $pharmacy->id,
                 'total_price' => 0,
                 'paid_total' => (float) $paidTotal,
                 'discount_percent' => 0,
+                'feedback' => $feedback,
             ]);
 
             foreach ($cart->items as $cartItem) {
@@ -275,6 +279,7 @@ class PharmacySalesCartController extends Controller
                 ->delete();
 
             $cart->pending_paid_total = null;
+            $cart->pending_feedback = null;
             $cart->save();
 
             return $invoice;

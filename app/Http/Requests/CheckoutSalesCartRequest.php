@@ -15,6 +15,7 @@ class CheckoutSalesCartRequest extends FormRequest
     {
         return [
             'paid_total' => ['required', 'numeric', 'min:0'],
+            'feedback' => ['nullable', 'string', 'max:2000'],
         ];
     }
 }

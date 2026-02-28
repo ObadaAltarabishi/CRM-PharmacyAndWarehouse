@@ -9,6 +9,7 @@ class SalesCart extends Model
     protected $fillable = [
         'pharmacy_id',
         'pending_paid_total',
+        'pending_feedback',
     ];
 
     public function pharmacy()

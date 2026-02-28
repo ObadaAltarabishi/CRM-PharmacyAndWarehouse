@@ -50,4 +50,9 @@ class Warehouse extends Authenticatable
         return $this->hasMany(Order::class);
     }
 
+    public function expenseInvoices()
+    {
+        return $this->hasMany(ExpenseInvoice::class);
+    }
+
 }

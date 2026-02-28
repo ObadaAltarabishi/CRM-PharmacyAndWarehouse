@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\ExpenseInvoice;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 
@@ -31,10 +32,29 @@ class WarehouseStatsController extends Controller
             ->where('approved_at', '>=', $monthStart)
             ->sum('total_cost');
 
+        $expenseDaily = ExpenseInvoice::query()
+            ->where('warehouse_id', $warehouse->id)
+            ->whereDate('created_at', $today)
+            ->sum('amount');
+        $expenseWeekly = ExpenseInvoice::query()
+            ->where('warehouse_id', $warehouse->id)
+            ->where('created_at', '>=', $weekStart)
+            ->sum('amount');
+        $expenseMonthly = ExpenseInvoice::query()
+            ->where('warehouse_id', $warehouse->id)
+            ->where('created_at', '>=', $monthStart)
+            ->sum('amount');
+
         return response()->json([
             'daily_sales' => $daily,
             'weekly_sales' => $weekly,
             'monthly_sales' => $monthly,
+            'daily_expenses' => $expenseDaily,
+            'weekly_expenses' => $expenseWeekly,
+            'monthly_expenses' => $expenseMonthly,
+            'daily_net' => $daily - $expenseDaily,
+            'weekly_net' => $weekly - $expenseWeekly,
+            'monthly_net' => $monthly - $expenseMonthly,
         ]);
     }
 }

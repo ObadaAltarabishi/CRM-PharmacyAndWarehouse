@@ -68,4 +68,9 @@ class Pharmacy extends Authenticatable
     {
         return $this->hasOne(OrderCart::class);
     }
+
+    public function expenseInvoices()
+    {
+        return $this->hasMany(ExpenseInvoice::class);
+    }
 }

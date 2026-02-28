@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreSalesInvoiceRequest;
+use App\Http\Requests\UpdateSalesInvoiceRequest;
 use App\Models\PharmacyProduct;
 use App\Models\Product;
 use App\Models\SalesInvoice;
 use App\Models\SalesInvoiceItem;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class SalesInvoiceController extends Controller
@@ -36,6 +38,80 @@ class SalesInvoiceController extends Controller
         $salesInvoice->load(['items.product']);
 
         return response()->json($salesInvoice);
+    }
+
+    public function update(UpdateSalesInvoiceRequest $request, SalesInvoice $salesInvoice): JsonResponse
+    {
+        $pharmacy = $request->user();
+
+        if ($salesInvoice->pharmacy_id !== $pharmacy->id) {
+            return response()->json(['message' => 'Unauthorized.'], 403);
+        }
+
+        $data = $request->validated();
+
+        if (array_key_exists('paid_total', $data)) {
+            $paidTotal = (float) $data['paid_total'];
+            $totalPrice = (float) $salesInvoice->total_price;
+            $discountPercent = $totalPrice > 0 ? (($totalPrice - $paidTotal) / $totalPrice) * 100 : 0;
+
+            $salesInvoice->paid_total = $paidTotal;
+            $salesInvoice->discount_percent = $discountPercent;
+        }
+
+        if (array_key_exists('feedback', $data)) {
+            $salesInvoice->feedback = $data['feedback'];
+        }
+
+        $salesInvoice->save();
+
+        return response()->json([
+            'message' => 'Sales invoice updated.',
+            'sales_invoice' => $salesInvoice,
+        ]);
+    }
+
+    public function updatePaidTotal(Request $request, SalesInvoice $salesInvoice): JsonResponse
+    {
+        $pharmacy = $request->user();
+
+        if ($salesInvoice->pharmacy_id !== $pharmacy->id) {
+            return response()->json(['message' => 'Unauthorized.'], 403);
+        }
+
+        $data = $request->validate([
+            'paid_total' => ['required', 'numeric', 'min:0'],
+        ]);
+
+        $paidTotal = (float) $data['paid_total'];
+        $totalPrice = (float) $salesInvoice->total_price;
+        $discountPercent = $totalPrice > 0 ? (($totalPrice - $paidTotal) / $totalPrice) * 100 : 0;
+
+        $salesInvoice->paid_total = $paidTotal;
+        $salesInvoice->discount_percent = $discountPercent;
+        $salesInvoice->save();
+
+        return response()->json([
+            'message' => 'Paid total updated.',
+            'sales_invoice' => $salesInvoice,
+        ]);
+    }
+
+    public function clearFeedback(SalesInvoice $salesInvoice): JsonResponse
+    {
+        $pharmacy = request()->user();
+
+        if ($salesInvoice->pharmacy_id !== $pharmacy->id) {
+            return response()->json(['message' => 'Unauthorized.'], 403);
+        }
+
+        $salesInvoice->feedback = null;
+        $salesInvoice->save();
+
+        return response()->json([
+            'message' => 'Feedback cleared.',
+            'sales_invoice' => $salesInvoice,
+        ]);
     }
 
     public function store(StoreSalesInvoiceRequest $request): JsonResponse

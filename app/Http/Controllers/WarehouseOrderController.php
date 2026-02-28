@@ -30,6 +30,38 @@ class WarehouseOrderController extends Controller
         return response()->json($orders);
     }
 
+    public function pending(): JsonResponse
+    {
+        $warehouse = request()->user();
+
+        $orders = Order::query()
+            ->where('warehouse_id', $warehouse->id)
+            ->where('status', Order::STATUS_PENDING)
+            ->with(['items.product', 'pharmacy:id,pharmacy_name,region_id', 'pharmacy.region:id,name', 'feedbacks'])
+            ->latest()
+            ->get();
+
+        return response()->json($orders);
+    }
+
+    public function show(Order $order): JsonResponse
+    {
+        $warehouse = request()->user();
+
+        if ($order->warehouse_id !== $warehouse->id) {
+            return response()->json(['message' => 'Unauthorized.'], 403);
+        }
+
+        $order->load([
+            'items.product',
+            'pharmacy:id,pharmacy_name,doctor_phone,doctor_email,region_id',
+            'pharmacy.region:id,name',
+            'feedbacks',
+        ]);
+
+        return response()->json($order);
+    }
+
     public function issues(): JsonResponse
     {
         $warehouse = request()->user();
