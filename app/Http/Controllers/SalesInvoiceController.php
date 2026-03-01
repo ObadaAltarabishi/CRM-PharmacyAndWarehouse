@@ -27,6 +27,37 @@ class SalesInvoiceController extends Controller
         return response()->json($invoices);
     }
 
+    public function withFeedback(): JsonResponse
+    {
+        $pharmacy = request()->user();
+
+        $invoices = SalesInvoice::query()
+            ->where('pharmacy_id', $pharmacy->id)
+            ->whereNotNull('feedback')
+            ->with(['items.product'])
+            ->latest()
+            ->get();
+
+        return response()->json($invoices);
+    }
+
+    public function showWithFeedback(SalesInvoice $salesInvoice): JsonResponse
+    {
+        $pharmacy = request()->user();
+
+        if ($salesInvoice->pharmacy_id !== $pharmacy->id) {
+            return response()->json(['message' => 'Unauthorized.'], 403);
+        }
+
+        if ($salesInvoice->feedback === null) {
+            return response()->json(['message' => 'Invoice has no feedback.'], 404);
+        }
+
+        $salesInvoice->load(['items.product']);
+
+        return response()->json($salesInvoice);
+    }
+
     public function show(SalesInvoice $salesInvoice): JsonResponse
     {
         $pharmacy = request()->user();

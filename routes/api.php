@@ -72,6 +72,8 @@ Route::middleware(['auth:sanctum', 'abilities:pharmacy'])->group(function () {
     Route::post('/pharmacy/orders/{order}/issue', [PharmacyOrderController::class, 'issue']);
     Route::post('/pharmacy/sales', [SalesInvoiceController::class, 'store']);
     Route::get('/pharmacy/sales-invoices', [SalesInvoiceController::class, 'index']);
+    Route::get('/pharmacy/sales-invoices/with-feedback', [SalesInvoiceController::class, 'withFeedback']);
+    Route::get('/pharmacy/sales-invoices/with-feedback/{salesInvoice}', [SalesInvoiceController::class, 'showWithFeedback']);
     Route::get('/pharmacy/sales-invoices/{salesInvoice}', [SalesInvoiceController::class, 'show']);
     Route::patch('/pharmacy/sales-invoices/{salesInvoice}', [SalesInvoiceController::class, 'update']);
     Route::patch('/pharmacy/sales-invoices/{salesInvoice}/paid-total', [SalesInvoiceController::class, 'updatePaidTotal']);
