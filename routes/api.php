@@ -63,6 +63,7 @@ Route::middleware(['auth:sanctum', 'abilities:admin'])->group(function () {
 
 Route::middleware(['auth:sanctum', 'abilities:pharmacy'])->group(function () {
     Route::post('/pharmacy/feedback', [FeedbackController::class, 'storeFromPharmacy']);
+    Route::get('/pharmacy/warehouses', [WarehouseController::class, 'indexForPharmacy']);
     Route::get('/pharmacy/products', [PharmacyInventoryController::class, 'index']);
     Route::post('/pharmacy/products', [PharmacyInventoryController::class, 'store']);
     Route::delete('/pharmacy/products/{barcode}', [PharmacyInventoryController::class, 'destroy']);

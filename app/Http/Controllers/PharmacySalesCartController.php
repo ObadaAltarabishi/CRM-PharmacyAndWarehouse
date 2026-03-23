@@ -186,6 +186,11 @@ class PharmacySalesCartController extends Controller
                 ->where('sales_cart_id', $cart->id)
                 ->delete();
 
+            $cart->pending_paid_total = null;
+            $cart->pending_feedback = null;
+            $cart->save();
+            $cart->delete();
+
             return $invoice;
         });
         } catch (\RuntimeException $exception) {
@@ -281,6 +286,7 @@ class PharmacySalesCartController extends Controller
             $cart->pending_paid_total = null;
             $cart->pending_feedback = null;
             $cart->save();
+            $cart->delete();
 
             return $invoice;
         });

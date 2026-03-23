@@ -10,6 +10,16 @@ use App\Models\Warehouse;
 
 class WarehouseController extends Controller
 {
+    // GET /api/pharmacy/warehouses
+    public function indexForPharmacy()
+    {
+        $warehouses = Warehouse::query()
+            ->with(['region:id,name'])
+            ->get();
+
+        return response()->json($warehouses);
+    }
+
     // GET /api/warehouses
     public function index(ListWarehousesRequest $request)
     {
