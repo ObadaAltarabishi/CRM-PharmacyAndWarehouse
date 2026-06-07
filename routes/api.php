@@ -16,6 +16,7 @@ use App\Http\Controllers\WarehouseAuthController;
 use App\Http\Controllers\WarehouseController;
 use App\Http\Controllers\WarehouseInventoryController;
 use App\Http\Controllers\WarehouseOrderController;
+use App\Http\Controllers\WarehouseRatingController;
 use App\Http\Controllers\WarehouseStatsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -64,6 +65,7 @@ Route::middleware(['auth:sanctum', 'abilities:admin'])->group(function () {
 Route::middleware(['auth:sanctum', 'abilities:pharmacy'])->group(function () {
     Route::post('/pharmacy/feedback', [FeedbackController::class, 'storeFromPharmacy']);
     Route::get('/pharmacy/warehouses', [WarehouseController::class, 'indexForPharmacy']);
+    Route::post('/pharmacy/warehouses/{warehouse}/rating', [WarehouseRatingController::class, 'store']);
     Route::get('/pharmacy/products', [PharmacyInventoryController::class, 'index']);
     Route::post('/pharmacy/products', [PharmacyInventoryController::class, 'store']);
     Route::delete('/pharmacy/products/{barcode}', [PharmacyInventoryController::class, 'destroy']);

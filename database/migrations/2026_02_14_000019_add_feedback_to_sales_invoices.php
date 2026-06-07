@@ -8,15 +8,19 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('sales_invoices', function (Blueprint $table) {
-            $table->text('feedback')->nullable()->after('discount_percent');
-        });
+        if (!Schema::hasColumn('sales_invoices', 'feedback')) {
+            Schema::table('sales_invoices', function (Blueprint $table) {
+                $table->text('feedback')->nullable()->after('discount_percent');
+            });
+        }
     }
 
     public function down(): void
     {
-        Schema::table('sales_invoices', function (Blueprint $table) {
-            $table->dropColumn('feedback');
-        });
+        if (Schema::hasColumn('sales_invoices', 'feedback')) {
+            Schema::table('sales_invoices', function (Blueprint $table) {
+                $table->dropColumn('feedback');
+            });
+        }
     }
 };

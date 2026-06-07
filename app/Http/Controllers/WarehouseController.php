@@ -7,17 +7,39 @@ use App\Http\Requests\DeleteWarehouseRequest;
 use App\Http\Requests\ListWarehousesRequest;
 use App\Models\Region;
 use App\Models\Warehouse;
+use App\Models\WarehouseRating;
 
 class WarehouseController extends Controller
 {
     // GET /api/pharmacy/warehouses
     public function indexForPharmacy()
     {
+        $pharmacy = request()->user();
+
         $warehouses = Warehouse::query()
             ->with(['region:id,name'])
+            ->withCount('ratings')
+            ->withAvg('ratings', 'rating')
             ->get();
 
-        return response()->json($warehouses);
+        $myRatings = WarehouseRating::query()
+            ->where('pharmacy_id', $pharmacy->id)
+            ->whereIn('warehouse_id', $warehouses->pluck('id'))
+            ->pluck('rating', 'warehouse_id');
+
+        $response = $warehouses->map(function (Warehouse $warehouse) use ($myRatings) {
+            $data = $warehouse->toArray();
+            $data['ratings_count'] = (int) $warehouse->ratings_count;
+            $data['rating_average'] = $warehouse->ratings_avg_rating !== null
+                ? round((float) $warehouse->ratings_avg_rating, 2)
+                : null;
+            $data['my_rating'] = $myRatings[$warehouse->id] ?? null;
+            unset($data['ratings_avg_rating']);
+
+            return $data;
+        });
+
+        return response()->json($response);
     }
 
     // GET /api/warehouses

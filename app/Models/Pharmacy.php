@@ -73,4 +73,9 @@ class Pharmacy extends Authenticatable
     {
         return $this->hasMany(ExpenseInvoice::class);
     }
+
+    public function warehouseRatings()
+    {
+        return $this->hasMany(WarehouseRating::class);
+    }
 }

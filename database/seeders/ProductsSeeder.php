@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Product;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Http;
 
@@ -50,16 +51,29 @@ class ProductsSeeder extends Seeder
 
         $inserted = 0;
         $max = 100;
+        $apiKey = config('services.openfda.key');
 
         foreach ($targets as $term) {
             if ($inserted >= $max) {
                 break;
             }
 
-            $response = Http::get('https://api.fda.gov/drug/ndc.json', [
+            $query = [
                 'search' => 'generic_name:"' . $term . '" AND finished:true',
                 'limit' => 5,
-            ]);
+            ];
+
+            if ($apiKey) {
+                $query['api_key'] = $apiKey;
+            }
+
+            try {
+                $response = Http::timeout(15)
+                    ->retry(2, 1000, throw: false)
+                    ->get('https://api.fda.gov/drug/ndc.json', $query);
+            } catch (ConnectionException) {
+                continue;
+            }
 
             if (!$response->ok()) {
                 continue;
@@ -102,6 +116,8 @@ class ProductsSeeder extends Seeder
                     $inserted++;
                 }
             }
+
+            usleep(250000);
         }
     }
 }

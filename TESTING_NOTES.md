@@ -25,6 +25,12 @@
 - Totals and quantities are correct after create/update/delete operations.
 - Idempotency expectations for repeated actions (where applicable).
 
+## Warehouse Rating Checks
+- Pharmacy can rate a warehouse only after a `received` order from that warehouse.
+- Re-rating the same warehouse updates the existing pharmacy/warehouse rating instead of creating a duplicate.
+- Pharmacy warehouse listing returns `ratings_count`, `rating_average`, and `my_rating`.
+- Cross-role access is denied for the pharmacy-only rating route.
+
 ## Inventory / Stock Validation Checks
 - Stock cannot go negative.
 - Insufficient stock fails with clear error and no partial writes.

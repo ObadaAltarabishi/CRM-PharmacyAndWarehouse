@@ -62,6 +62,12 @@
 - **Reason**: Keeps validation reusable, testable, and consistent.
 - **Notes**: Legacy inline validation can be migrated incrementally.
 
+### D-010 Warehouse ratings by received-order pharmacies
+- **Decision**: Store warehouse ratings in `warehouse_ratings`, one rating per pharmacy/warehouse pair, and allow rating only when the pharmacy has a `received` order from that warehouse.
+- **Status**: active
+- **Reason**: Prevents duplicate ratings while ensuring only pharmacies with completed warehouse interactions can rate.
+- **Notes**: Pharmacy warehouse listings expose aggregate rating count/average and the current pharmacy's own rating, without exposing which pharmacies rated.
+
 ## Pending Decision Slots
 - TODO: Decide if order/sales lifecycle state transitions should be centralized in services or remain in controllers.
 - TODO: Decide minimum required test coverage gates for stock-critical merges.
