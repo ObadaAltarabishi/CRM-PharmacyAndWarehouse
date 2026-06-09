@@ -68,6 +68,12 @@
 - **Reason**: Prevents duplicate ratings while ensuring only pharmacies with completed warehouse interactions can rate.
 - **Notes**: Pharmacy warehouse listings expose aggregate rating count/average and the current pharmacy's own rating, without exposing which pharmacies rated.
 
+### D-011 OTP login for pharmacies and warehouses
+- **Decision**: Require email OTP verification for pharmacy and warehouse login, while keeping admin login unchanged.
+- **Status**: active
+- **Reason**: Adds a second login step for operational actors without changing admin workflow.
+- **Notes**: OTP codes are 6 digits, expire after 5 minutes, allow 5 invalid attempts, and resend is rate-limited to 30 seconds. Tokens are created only after successful OTP verification.
+
 ## Pending Decision Slots
 - TODO: Decide if order/sales lifecycle state transitions should be centralized in services or remain in controllers.
 - TODO: Decide minimum required test coverage gates for stock-critical merges.

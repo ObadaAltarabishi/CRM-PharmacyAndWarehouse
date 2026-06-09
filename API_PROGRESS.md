@@ -8,7 +8,9 @@
 ## Completed
 - Admin authentication and registration.
 - Pharmacy login.
+- Pharmacy OTP login verification.
 - Warehouse login.
+- Warehouse OTP login verification.
 - Admin management and reporting endpoints.
 - Pharmacy inventory endpoints.
 - Warehouse inventory endpoints.
@@ -64,6 +66,34 @@
 - **Tests Run**: `php artisan migrate:fresh`; `php artisan test` (2 passed).
 - **Open Risks**: `2026_02_14_000018_add_created_by_name_to_expense_invoices.php` is currently absent; this is fine for fresh development because `created_by_name` exists in the expense invoice create migration.
 - **Next Step**: Continue with the next planned feature.
+- **Date**: 2026-06-09
+- **Worked On**: OTP login flow for pharmacies and warehouses.
+- **Files Changed**: `routes/api.php`, pharmacy/warehouse auth controllers, OTP model/migration/mail/support/request files, `.env.example`, API docs.
+- **Behavior Changes**: Pharmacy and warehouse login now sends a 6-digit OTP by email and does not create a token until OTP verification succeeds. OTP expires after 5 minutes, invalidates after 5 wrong attempts, and resend is rate-limited to 30 seconds.
+- **Tests Run**: `php -l` on OTP files; `php artisan route:list --path=login`; `php artisan migrate`; `php artisan test` (2 passed).
+- **Open Risks**: Requires Gmail SMTP credentials in `.env`; add feature tests with `Mail::fake()`.
+- **Next Step**: Verify migrations/routes/tests and provide Postman examples.
+- **Date**: 2026-06-09
+- **Worked On**: Fixed Gmail SMTP mailer scheme configuration.
+- **Files Changed**: `config/mail.php`, `.env.example`.
+- **Behavior Changes**: Gmail SMTP now uses a Symfony-supported `smtp` scheme; existing `MAIL_SCHEME=tls` values are normalized to `smtp` to avoid unsupported scheme errors.
+- **Tests Run**: `php -l config/mail.php`; `php artisan config:clear`; `php artisan test` (2 passed).
+- **Open Risks**: Run `php artisan config:clear` after changing `.env`.
+- **Next Step**: Retry pharmacy/warehouse login OTP email.
+- **Date**: 2026-06-09
+- **Worked On**: Simplified OTP verification payload.
+- **Files Changed**: `VerifyLoginOtpRequest`, pharmacy/warehouse auth controllers, `LoginOtpService`, API docs.
+- **Behavior Changes**: Pharmacy and warehouse OTP verification now requires only the 6-digit `otp`; the actor is resolved from active OTP records for the matching role.
+- **Tests Run**: `php -l` on OTP request/controller/service files; `php artisan test` (2 passed).
+- **Open Risks**: Active OTP codes should be treated as login credentials during their 5-minute lifetime.
+- **Next Step**: Run syntax checks/tests and retry Postman verify payload.
+- **Date**: 2026-06-09
+- **Worked On**: Simplified OTP resend payload.
+- **Files Changed**: `login_otps` migration/model, OTP resend request, OTP service, pharmacy/warehouse auth controllers.
+- **Behavior Changes**: Login returns `otp_request_token`; resend OTP now uses that token and no longer requires `login` or `password`.
+- **Tests Run**: `php -l` on OTP resend files; `php artisan migrate`; `php artisan test` (2 passed).
+- **Open Risks**: Frontend/Postman must keep `otp_request_token` from login response until OTP verification finishes.
+- **Next Step**: Run migration/checks/tests and retry resend payload.
 - **Date**: 2026-06-07
 - **Worked On**: Improved openFDA product seeding reliability.
 - **Files Changed**: `database/seeders/ProductsSeeder.php`, `config/services.php`, `.env.example`.

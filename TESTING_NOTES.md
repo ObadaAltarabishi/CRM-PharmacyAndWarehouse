@@ -9,6 +9,11 @@
 - Verify login/auth per actor (`admin`, `pharmacy`, `warehouse`).
 - Verify Sanctum ability protection on each role route group.
 - Verify cross-role access is denied (e.g., pharmacy token on warehouse-only route).
+- Verify pharmacy and warehouse login sends OTP but does not create a token before OTP verification.
+- Verify valid OTP creates a token with the correct Sanctum ability.
+- Verify OTP verification requires only `otp` and resolves the actor by active OTP for the matching role.
+- Verify expired OTP, invalid OTP, and 5 invalid attempts block token creation.
+- Verify resend requires `otp_request_token` from the login response and enforces the 30-second cooldown.
 
 ## Example Route Patterns (Placeholders)
 - `POST /api/admin/login`

@@ -9,7 +9,11 @@
 - `POST /api/admin/register`
 - `POST /api/admin/login`
 - `POST /api/pharmacy/login`
+- `POST /api/pharmacy/login/verify-otp`
+- `POST /api/pharmacy/login/resend-otp`
 - `POST /api/warehouse/login`
+- `POST /api/warehouse/login/verify-otp`
+- `POST /api/warehouse/login/resend-otp`
 
 ## Shared (Authenticated)
 - Middleware: `auth:sanctum`

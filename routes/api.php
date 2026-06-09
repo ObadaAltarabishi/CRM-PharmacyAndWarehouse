@@ -32,7 +32,11 @@ use App\Models\Warehouse;
 Route::post('/admin/register', [AdminAuthController::class, 'register']);
 Route::post('/admin/login', [AdminAuthController::class, 'login']);
 Route::post('/pharmacy/login', [PharmacyAuthController::class, 'login']);
+Route::post('/pharmacy/login/verify-otp', [PharmacyAuthController::class, 'verifyOtp']);
+Route::post('/pharmacy/login/resend-otp', [PharmacyAuthController::class, 'resendOtp']);
 Route::post('/warehouse/login', [WarehouseAuthController::class, 'login']);
+Route::post('/warehouse/login/verify-otp', [WarehouseAuthController::class, 'verifyOtp']);
+Route::post('/warehouse/login/resend-otp', [WarehouseAuthController::class, 'resendOtp']);
 
 Route::middleware(['auth:sanctum', 'abilities:admin'])->group(function () {
     Route::get('/admin/me', [AdminController::class, 'profile']);
