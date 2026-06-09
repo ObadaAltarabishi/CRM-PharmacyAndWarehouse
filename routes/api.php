@@ -6,6 +6,7 @@ use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\ExpenseInvoiceController;
 use App\Http\Controllers\PharmacyAuthController;
 use App\Http\Controllers\PharmacyInventoryController;
+use App\Http\Controllers\PharmacyOrderAssistantController;
 use App\Http\Controllers\PharmacyOrderController;
 use App\Http\Controllers\PharmacyOrderCartController;
 use App\Http\Controllers\PharmacySalesCartController;
@@ -77,6 +78,8 @@ Route::middleware(['auth:sanctum', 'abilities:pharmacy'])->group(function () {
     Route::post('/pharmacy/orders', [PharmacyOrderController::class, 'store']);
     Route::post('/pharmacy/orders/{order}/receive', [PharmacyOrderController::class, 'receive']);
     Route::post('/pharmacy/orders/{order}/issue', [PharmacyOrderController::class, 'issue']);
+    Route::get('/pharmacy/order-assistant/proposal', [PharmacyOrderAssistantController::class, 'proposal']);
+    Route::post('/pharmacy/order-assistant/apply', [PharmacyOrderAssistantController::class, 'apply']);
     Route::post('/pharmacy/sales', [SalesInvoiceController::class, 'store']);
     Route::get('/pharmacy/sales-invoices', [SalesInvoiceController::class, 'index']);
     Route::get('/pharmacy/sales-invoices/with-feedback', [SalesInvoiceController::class, 'withFeedback']);
@@ -122,8 +125,8 @@ Route::middleware(['auth:sanctum', 'abilities:warehouse'])->group(function () {
     Route::delete('/warehouse/products/{barcode}', [WarehouseInventoryController::class, 'destroy']);
     Route::get('/warehouse/orders', [WarehouseOrderController::class, 'index']);
     Route::get('/warehouse/orders/pending', [WarehouseOrderController::class, 'pending']);
-    Route::get('/warehouse/orders/{order}', [WarehouseOrderController::class, 'show']);
     Route::get('/warehouse/orders/issues', [WarehouseOrderController::class, 'issues']);
+    Route::get('/warehouse/orders/{order}', [WarehouseOrderController::class, 'show']);
     Route::post('/warehouse/orders/{order}/approve', [WarehouseOrderController::class, 'approve']);
     Route::post('/warehouse/orders/{order}/reject', [WarehouseOrderController::class, 'reject']);
     Route::get('/warehouse/stats/summary', [WarehouseStatsController::class, 'summary']);

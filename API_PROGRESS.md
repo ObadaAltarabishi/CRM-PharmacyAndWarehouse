@@ -15,6 +15,7 @@
 - Pharmacy inventory endpoints.
 - Warehouse inventory endpoints.
 - Pharmacy order cart and order flow.
+- Pharmacy order assistant proposal/apply flow.
 - Warehouse order review, approval, and rejection.
 - Pharmacy sales cart and checkout flow.
 - Sales invoice endpoints.
@@ -34,6 +35,7 @@
 
 ## Endpoints / Modules To Verify
 - Warehouse rating eligibility requires a received pharmacy order from the warehouse.
+- Order assistant proposal and apply-to-cart behavior.
 - Pharmacy sales checkout confirmation path (`>= 20%` discount).
 - Stock decrementation safety across sales finalization.
 - Order approval/rejection and subsequent pharmacy-side state handling.
@@ -66,6 +68,20 @@
 - **Tests Run**: `php artisan migrate:fresh`; `php artisan test` (2 passed).
 - **Open Risks**: `2026_02_14_000018_add_created_by_name_to_expense_invoices.php` is currently absent; this is fine for fresh development because `created_by_name` exists in the expense invoice create migration.
 - **Next Step**: Continue with the next planned feature.
+- **Date**: 2026-06-09
+- **Worked On**: Pharmacy order assistant.
+- **Files Changed**: `routes/api.php`, `PharmacyOrderAssistantController`, `ApplyOrderAssistantProposalRequest`, API docs.
+- **Behavior Changes**: Pharmacies can generate a suggested order from low/out-of-stock inventory, choose the cheapest single warehouse that can fulfill all suggested items, and apply the proposal to the existing order cart flow.
+- **Tests Run**: `php -l` on order assistant files; `php artisan route:list --path=order-assistant`; `php artisan test` (2 passed).
+- **Open Risks**: Needs feature tests for no-needed-products, no-single-warehouse, cheapest warehouse, and apply stock validation.
+- **Next Step**: Run syntax checks/routes/tests and provide Postman examples.
+- **Date**: 2026-06-09
+- **Worked On**: Fixed warehouse order issues route ordering.
+- **Files Changed**: `routes/api.php`.
+- **Behavior Changes**: `GET /api/warehouse/orders/issues` now resolves to `WarehouseOrderController@issues` instead of being captured by `/warehouse/orders/{order}` model binding.
+- **Tests Run**: `php artisan route:list --path=warehouse/orders`; `php artisan test` (2 passed).
+- **Open Risks**: Keep static warehouse order routes before dynamic `{order}` routes.
+- **Next Step**: Re-test route list and continue order assistant work.
 - **Date**: 2026-06-09
 - **Worked On**: OTP login flow for pharmacies and warehouses.
 - **Files Changed**: `routes/api.php`, pharmacy/warehouse auth controllers, OTP model/migration/mail/support/request files, `.env.example`, API docs.

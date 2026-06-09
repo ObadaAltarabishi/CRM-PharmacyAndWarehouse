@@ -49,6 +49,14 @@
 - Order flow transitions are valid: cart -> submitted -> approved/rejected -> received/issue handling.
 - Rejected/invalid transitions are blocked with clear responses.
 
+## Order Assistant Checks
+- Products with quantity `0` are suggested with quantity `10`.
+- Products with quantity below `5` are suggested with quantity `5`.
+- Warehouses missing any suggested product or quantity are excluded.
+- Cheapest complete warehouse is selected by total invoice cost.
+- Applying a proposal writes items into `OrderCart` and keeps checkout in the existing order-cart flow.
+- Applying validates warehouse stock again and returns clear errors for missing/insufficient products.
+
 ## Known Bug Patterns / Debugging Notes
 - Partial updates when transaction boundaries are missing.
 - Status transitions not guarded tightly enough.

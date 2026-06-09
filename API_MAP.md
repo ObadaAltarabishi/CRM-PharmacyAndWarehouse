@@ -78,6 +78,10 @@
 - `POST /api/pharmacy/orders/{order}/receive`
 - `POST /api/pharmacy/orders/{order}/issue`
 
+### Order Assistant
+- `GET /api/pharmacy/order-assistant/proposal`
+- `POST /api/pharmacy/order-assistant/apply`
+
 ### Sales Cart (High Risk)
 - `GET /api/pharmacy/sales-cart`
 - `POST /api/pharmacy/sales-cart/items`

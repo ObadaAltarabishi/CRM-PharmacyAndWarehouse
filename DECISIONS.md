@@ -74,6 +74,12 @@
 - **Reason**: Adds a second login step for operational actors without changing admin workflow.
 - **Notes**: OTP codes are 6 digits, expire after 5 minutes, allow 5 invalid attempts, and resend is rate-limited to 30 seconds. Tokens are created only after successful OTP verification.
 
+### D-012 Pharmacy order assistant uses one cheapest complete warehouse
+- **Decision**: Generate order assistant proposals from pharmacy products below 5 units, requesting 10 units for out-of-stock products and 5 units for low-stock products, then select the cheapest single warehouse that can fulfill all suggested items.
+- **Status**: active
+- **Reason**: Keeps assistant orders compatible with the existing one-warehouse order cart model.
+- **Notes**: The assistant applies proposals to `OrderCart`; the existing order-cart endpoints remain responsible for manual edits and checkout.
+
 ## Pending Decision Slots
 - TODO: Decide if order/sales lifecycle state transitions should be centralized in services or remain in controllers.
 - TODO: Decide minimum required test coverage gates for stock-critical merges.
