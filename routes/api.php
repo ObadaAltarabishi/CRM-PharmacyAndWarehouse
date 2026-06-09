@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\ExpenseInvoiceController;
+use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\PharmacyAuthController;
 use App\Http\Controllers\PharmacyInventoryController;
 use App\Http\Controllers\PharmacyOrderAssistantController;
@@ -41,6 +42,7 @@ Route::post('/warehouse/login/resend-otp', [WarehouseAuthController::class, 'res
 
 Route::middleware(['auth:sanctum', 'abilities:admin'])->group(function () {
     Route::get('/admin/me', [AdminController::class, 'profile']);
+    Route::patch('/admin/password', [PasswordController::class, 'update']);
     Route::get('/admins', [AdminController::class, 'index']);
     Route::get('/admins/count', [AdminController::class, 'count']);
     Route::get('/admins/pharmacies-count', [AdminController::class, 'pharmaciesCount']);
@@ -68,6 +70,8 @@ Route::middleware(['auth:sanctum', 'abilities:admin'])->group(function () {
 
 
 Route::middleware(['auth:sanctum', 'abilities:pharmacy'])->group(function () {
+    Route::get('/pharmacy/me', [PharmacyController::class, 'profile']);
+    Route::patch('/pharmacy/password', [PasswordController::class, 'update']);
     Route::post('/pharmacy/feedback', [FeedbackController::class, 'storeFromPharmacy']);
     Route::get('/pharmacy/warehouses', [WarehouseController::class, 'indexForPharmacy']);
     Route::post('/pharmacy/warehouses/{warehouse}/rating', [WarehouseRatingController::class, 'store']);
@@ -119,6 +123,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 
 Route::middleware(['auth:sanctum', 'abilities:warehouse'])->group(function () {
+    Route::get('/warehouse/me', [WarehouseController::class, 'profile']);
+    Route::patch('/warehouse/password', [PasswordController::class, 'update']);
     Route::post('/warehouse/feedback', [FeedbackController::class, 'storeFromWarehouse']);
     Route::get('/warehouse/products', [WarehouseInventoryController::class, 'index']);
     Route::post('/warehouse/products', [WarehouseInventoryController::class, 'store']);

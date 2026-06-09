@@ -9,8 +9,12 @@
 - Admin authentication and registration.
 - Pharmacy login.
 - Pharmacy OTP login verification.
+- Pharmacy profile endpoint.
+- Pharmacy change password endpoint.
 - Warehouse login.
 - Warehouse OTP login verification.
+- Warehouse profile endpoint.
+- Warehouse change password endpoint.
 - Admin management and reporting endpoints.
 - Pharmacy inventory endpoints.
 - Warehouse inventory endpoints.
@@ -61,6 +65,13 @@
 - **Tests Run**: `php artisan test` (2 passed).
 - **Open Risks**: Add feature tests for rating eligibility and update behavior.
 - **Next Step**: Implement the next planned feature after confirming requirements.
+- **Date**: 2026-06-09
+- **Worked On**: Change password endpoints for admin, pharmacy, and warehouse.
+- **Files Changed**: `routes/api.php`, `PasswordController`, `ChangePasswordRequest`, API docs.
+- **Behavior Changes**: Authenticated actors can change password using current password, new password, and confirmation. Incorrect current password or mismatched confirmation blocks the change.
+- **Tests Run**: `php -l` on password files; `php artisan route:list --path=password`; `php artisan test` (2 passed).
+- **Open Risks**: Add feature tests for old password rejection and confirmation validation.
+- **Next Step**: Run route checks/tests and provide Postman examples.
 - **Date**: 2026-06-07
 - **Worked On**: Fixed migration freshness for duplicate `feedback` column.
 - **Files Changed**: `database/migrations/2026_02_14_000019_add_feedback_to_sales_invoices.php`.
@@ -69,12 +80,26 @@
 - **Open Risks**: `2026_02_14_000018_add_created_by_name_to_expense_invoices.php` is currently absent; this is fine for fresh development because `created_by_name` exists in the expense invoice create migration.
 - **Next Step**: Continue with the next planned feature.
 - **Date**: 2026-06-09
+- **Worked On**: Pharmacy and warehouse profile endpoints.
+- **Files Changed**: `routes/api.php`, `PharmacyController`, `WarehouseController`, API docs.
+- **Behavior Changes**: Added authenticated `GET /api/pharmacy/me` and `GET /api/warehouse/me` endpoints returning actor profile data with region/admin relations and hidden password fields.
+- **Tests Run**: `php -l` on profile controllers; `php artisan route:list --path=me`; `php artisan test` (2 passed).
+- **Open Risks**: Add authorization tests for cross-role access.
+- **Next Step**: Run route checks/tests and provide Postman examples.
+- **Date**: 2026-06-09
 - **Worked On**: Pharmacy order assistant.
 - **Files Changed**: `routes/api.php`, `PharmacyOrderAssistantController`, `ApplyOrderAssistantProposalRequest`, API docs.
 - **Behavior Changes**: Pharmacies can generate a suggested order from low/out-of-stock inventory, choose the cheapest single warehouse that can fulfill all suggested items, and apply the proposal to the existing order cart flow.
 - **Tests Run**: `php -l` on order assistant files; `php artisan route:list --path=order-assistant`; `php artisan test` (2 passed).
 - **Open Risks**: Needs feature tests for no-needed-products, no-single-warehouse, cheapest warehouse, and apply stock validation.
 - **Next Step**: Run syntax checks/routes/tests and provide Postman examples.
+- **Date**: 2026-06-09
+- **Worked On**: Added partial fallback to pharmacy order assistant.
+- **Files Changed**: `PharmacyOrderAssistantController`, API docs.
+- **Behavior Changes**: If no single warehouse can fulfill all suggested items, the assistant now returns the best partial proposal from one warehouse plus `missing_items` instead of failing.
+- **Tests Run**: `php -l app/Http/Controllers/PharmacyOrderAssistantController.php`; `php artisan test` (2 passed).
+- **Open Risks**: Needs feature tests for partial proposal ranking by covered item count then total cost.
+- **Next Step**: Run syntax checks/tests and provide updated response examples.
 - **Date**: 2026-06-09
 - **Worked On**: Fixed warehouse order issues route ordering.
 - **Files Changed**: `routes/api.php`.

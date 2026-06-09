@@ -33,13 +33,6 @@ class PharmacyOrderAssistantController extends Controller
 
         $proposal = $this->bestWarehouseProposal($items);
 
-        if (!$proposal) {
-            return response()->json([
-                'message' => 'No single warehouse can fulfill all suggested items.',
-                'items' => $items->values(),
-            ], 422);
-        }
-
         return response()->json($proposal);
     }
 
@@ -199,7 +192,8 @@ class PharmacyOrderAssistantController extends Controller
             ->withAvg('ratings', 'rating')
             ->get();
 
-        $bestProposal = null;
+        $bestCompleteProposal = null;
+        $bestPartialProposal = null;
 
         foreach ($warehouses as $warehouse) {
             $warehouseProducts = WarehouseProduct::query()
@@ -208,13 +202,9 @@ class PharmacyOrderAssistantController extends Controller
                 ->get()
                 ->keyBy('product_id');
 
-            if ($warehouseProducts->count() !== $items->count()) {
-                continue;
-            }
-
             $proposalItems = [];
+            $missingItems = [];
             $total = 0;
-            $canFulfill = true;
 
             foreach ($items as $item) {
                 $warehouseProduct = $warehouseProducts[$item['product_id']] ?? null;
@@ -223,8 +213,10 @@ class PharmacyOrderAssistantController extends Controller
                     : 0;
 
                 if (!$warehouseProduct || $available < $item['suggested_quantity']) {
-                    $canFulfill = false;
-                    break;
+                    $missingItems[] = array_merge($item, [
+                        'available_quantity' => $available,
+                    ]);
+                    continue;
                 }
 
                 $unitPrice = (float) $warehouseProduct->sell_price_to_pharmacy;
@@ -238,28 +230,69 @@ class PharmacyOrderAssistantController extends Controller
                 ]);
             }
 
-            if (!$canFulfill) {
+            if (empty($proposalItems)) {
                 continue;
             }
 
-            if ($bestProposal === null || $total < $bestProposal['total_cost']) {
-                $bestProposal = [
-                    'warehouse' => [
-                        'id' => $warehouse->id,
-                        'warehouse_name' => $warehouse->warehouse_name,
-                        'region' => $warehouse->region,
-                        'ratings_count' => (int) $warehouse->ratings_count,
-                        'rating_average' => $warehouse->ratings_avg_rating !== null
-                            ? round((float) $warehouse->ratings_avg_rating, 2)
-                            : null,
-                    ],
-                    'items' => $proposalItems,
-                    'total_cost' => $total,
-                ];
+            $proposal = [
+                'fulfillment' => empty($missingItems) ? 'complete' : 'partial',
+                'message' => empty($missingItems)
+                    ? 'Complete assistant proposal generated.'
+                    : 'No single warehouse can fulfill all suggested items. Best partial proposal returned.',
+                'warehouse' => [
+                    'id' => $warehouse->id,
+                    'warehouse_name' => $warehouse->warehouse_name,
+                    'region' => $warehouse->region,
+                    'ratings_count' => (int) $warehouse->ratings_count,
+                    'rating_average' => $warehouse->ratings_avg_rating !== null
+                        ? round((float) $warehouse->ratings_avg_rating, 2)
+                        : null,
+                ],
+                'items' => $proposalItems,
+                'missing_items' => $missingItems,
+                'total_cost' => $total,
+                'covered_items_count' => count($proposalItems),
+                'missing_items_count' => count($missingItems),
+            ];
+
+            if ($proposal['fulfillment'] === 'complete') {
+                if ($bestCompleteProposal === null || $total < $bestCompleteProposal['total_cost']) {
+                    $bestCompleteProposal = $proposal;
+                }
+
+                continue;
+            }
+
+            if (
+                $bestPartialProposal === null
+                || $proposal['covered_items_count'] > $bestPartialProposal['covered_items_count']
+                || (
+                    $proposal['covered_items_count'] === $bestPartialProposal['covered_items_count']
+                    && $total < $bestPartialProposal['total_cost']
+                )
+            ) {
+                $bestPartialProposal = $proposal;
             }
         }
 
-        return $bestProposal;
+        if ($bestCompleteProposal) {
+            return $bestCompleteProposal;
+        }
+
+        if ($bestPartialProposal) {
+            return $bestPartialProposal;
+        }
+
+        return [
+            'fulfillment' => 'none',
+            'message' => 'No warehouse can fulfill any suggested item.',
+            'warehouse' => null,
+            'items' => [],
+            'missing_items' => $items->values(),
+            'total_cost' => 0,
+            'covered_items_count' => 0,
+            'missing_items_count' => $items->count(),
+        ];
     }
 
     private function cartResponse(OrderCart $cart): array

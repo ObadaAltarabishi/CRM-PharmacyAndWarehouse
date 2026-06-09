@@ -11,6 +11,19 @@ use App\Models\WarehouseRating;
 
 class WarehouseController extends Controller
 {
+    // GET /api/warehouse/me
+    public function profile()
+    {
+        $warehouse = request()->user();
+
+        $warehouse->load([
+            'region:id,name',
+            'admin:id,name,email,phone',
+        ]);
+
+        return response()->json($warehouse);
+    }
+
     // GET /api/pharmacy/warehouses
     public function indexForPharmacy()
     {

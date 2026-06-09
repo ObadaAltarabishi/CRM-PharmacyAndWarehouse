@@ -14,6 +14,8 @@
 - Verify OTP verification requires only `otp` and resolves the actor by active OTP for the matching role.
 - Verify expired OTP, invalid OTP, and 5 invalid attempts block token creation.
 - Verify resend requires `otp_request_token` from the login response and enforces the 30-second cooldown.
+- Verify pharmacy/warehouse profile endpoints return the current actor and never expose password fields.
+- Verify admin/pharmacy/warehouse password change requires correct current password and matching confirmation.
 
 ## Example Route Patterns (Placeholders)
 - `POST /api/admin/login`
@@ -54,6 +56,7 @@
 - Products with quantity below `5` are suggested with quantity `5`.
 - Warehouses missing any suggested product or quantity are excluded.
 - Cheapest complete warehouse is selected by total invoice cost.
+- If no complete warehouse exists, best partial proposal is selected by covered item count, then total cost, and missing items are returned.
 - Applying a proposal writes items into `OrderCart` and keeps checkout in the existing order-cart flow.
 - Applying validates warehouse stock again and returns clear errors for missing/insufficient products.
 

@@ -10,6 +10,19 @@ use App\Models\Region;
 
 class PharmacyController extends Controller
 {
+    // GET /api/pharmacy/me
+    public function profile()
+    {
+        $pharmacy = request()->user();
+
+        $pharmacy->load([
+            'region:id,name',
+            'admin:id,name,email,phone',
+        ]);
+
+        return response()->json($pharmacy);
+    }
+
     // GET /api/pharmacies
     public function index(ListPharmaciesRequest $request)
     {

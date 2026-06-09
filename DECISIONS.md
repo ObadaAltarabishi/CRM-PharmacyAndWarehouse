@@ -78,7 +78,7 @@
 - **Decision**: Generate order assistant proposals from pharmacy products below 5 units, requesting 10 units for out-of-stock products and 5 units for low-stock products, then select the cheapest single warehouse that can fulfill all suggested items.
 - **Status**: active
 - **Reason**: Keeps assistant orders compatible with the existing one-warehouse order cart model.
-- **Notes**: The assistant applies proposals to `OrderCart`; the existing order-cart endpoints remain responsible for manual edits and checkout.
+- **Notes**: If no warehouse can fulfill all suggested items, return the best partial one-warehouse proposal by covered item count, then by total cost. The assistant applies proposals to `OrderCart`; the existing order-cart endpoints remain responsible for manual edits and checkout.
 
 ## Pending Decision Slots
 - TODO: Decide if order/sales lifecycle state transitions should be centralized in services or remain in controllers.

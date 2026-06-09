@@ -24,6 +24,7 @@
 
 ### Profile / Admin Management
 - `GET /api/admin/me`
+- `PATCH /api/admin/password`
 - `GET /api/admins`
 - `GET /api/admins/count`
 - `DELETE /api/admins/{admin}`
@@ -52,6 +53,10 @@
 
 ## Pharmacy Area
 - Middleware: `auth:sanctum` + `abilities:pharmacy`
+
+### Profile
+- `GET /api/pharmacy/me`
+- `PATCH /api/pharmacy/password`
 
 ### Feedback / Reference
 - `POST /api/pharmacy/feedback`
@@ -113,6 +118,10 @@
 
 ## Warehouse Area
 - Middleware: `auth:sanctum` + `abilities:warehouse`
+
+### Profile
+- `GET /api/warehouse/me`
+- `PATCH /api/warehouse/password`
 
 ### Feedback / Reference
 - `POST /api/warehouse/feedback`
