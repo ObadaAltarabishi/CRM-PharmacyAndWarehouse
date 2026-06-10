@@ -65,6 +65,13 @@
 - **Tests Run**: `php artisan test` (2 passed).
 - **Open Risks**: Add feature tests for rating eligibility and update behavior.
 - **Next Step**: Implement the next planned feature after confirming requirements.
+- **Date**: 2026-06-10
+- **Worked On**: Single warehouse rating summary endpoint.
+- **Files Changed**: `WarehouseRatingController`, `routes/api.php`, API docs.
+- **Behavior Changes**: Added `GET /api/pharmacy/warehouses/{warehouse}/rating` to return one warehouse rating average and rating count by ID.
+- **Tests Run**: `php -l app/Http/Controllers/WarehouseRatingController.php`; `php artisan route:list --path=pharmacy/warehouses`; `php artisan test` (2 passed).
+- **Open Risks**: Add feature test for unrated warehouse returning count `0` and average `null`.
+- **Next Step**: Run route checks/tests and provide Postman example.
 - **Date**: 2026-06-09
 - **Worked On**: Change password endpoints for admin, pharmacy, and warehouse.
 - **Files Changed**: `routes/api.php`, `PasswordController`, `ChangePasswordRequest`, API docs.

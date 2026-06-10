@@ -74,6 +74,7 @@ Route::middleware(['auth:sanctum', 'abilities:pharmacy'])->group(function () {
     Route::patch('/pharmacy/password', [PasswordController::class, 'update']);
     Route::post('/pharmacy/feedback', [FeedbackController::class, 'storeFromPharmacy']);
     Route::get('/pharmacy/warehouses', [WarehouseController::class, 'indexForPharmacy']);
+    Route::get('/pharmacy/warehouses/{warehouse}/rating', [WarehouseRatingController::class, 'show']);
     Route::post('/pharmacy/warehouses/{warehouse}/rating', [WarehouseRatingController::class, 'store']);
     Route::get('/pharmacy/products', [PharmacyInventoryController::class, 'index']);
     Route::post('/pharmacy/products', [PharmacyInventoryController::class, 'store']);

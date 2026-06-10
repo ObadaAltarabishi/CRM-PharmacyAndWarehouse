@@ -1,0 +1,289 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [6 0 R 8 0 R 10 0 R 12 0 R 14 0 R] /Count 5 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+5 0 obj
+<< /Length 3899 >>
+stream
+BT /F2 18 Tf 45 790 Td (Functional Test Cases Report) Tj ET
+BT /F1 10 Tf 45 766 Td (Pharmacy Management System - Backend API functional test cases covering authentication, admin) Tj ET
+BT /F1 10 Tf 45 752 Td (management, pharmacy orders, warehouse operations, sales, expenses, feedback, ratings, and) Tj ET
+BT /F1 10 Tf 45 738 Td (statistics.) Tj ET
+BT /F1 8 Tf 45 724 Td () Tj ET
+BT /F2 14 Tf 45 716 Td (9.5.1 Authentication and Account Security) Tj ET
+BT /F1 10 Tf 45 696 Td (This section documents the functional test cases related to authentication, OTP verification,) Tj ET
+BT /F1 10 Tf 45 682 Td (profile access, and password change for the Pharmacy Management System. These tests verify that) Tj ET
+BT /F1 10 Tf 45 668 Td (users can securely access the system according to their roles.) Tj ET
+BT /F1 8 Tf 45 654 Td () Tj ET
+BT /F2 11 Tf 45 646 Td (Test Case 1: Admin Login) Tj ET
+BT /F1 9 Tf 57 630 Td (Preconditions: Admin account exists) Tj ET
+BT /F1 9 Tf 57 616 Td (Test Steps: 1. Enter valid email/phone and password; 2. Send login request) Tj ET
+BT /F1 9 Tf 57 602 Td (Expected Results: Admin is authenticated and token is returned) Tj ET
+BT /F1 9 Tf 57 588 Td (Actual Results: Admin logged in successfully) Tj ET
+BT /F2 9 Tf 57 574 Td (Status: Pass) Tj ET
+BT /F2 11 Tf 45 558 Td (Test Case 2: Pharmacy Login Sends OTP) Tj ET
+BT /F1 9 Tf 57 542 Td (Preconditions: Pharmacy account exists) Tj ET
+BT /F1 9 Tf 57 528 Td (Test Steps: 1. Enter valid login and password; 2. Submit login request) Tj ET
+BT /F1 9 Tf 57 514 Td (Expected Results: OTP is sent to pharmacy email and no token is created yet) Tj ET
+BT /F1 9 Tf 57 500 Td (Actual Results: OTP sent successfully) Tj ET
+BT /F2 9 Tf 57 486 Td (Status: Pass) Tj ET
+BT /F2 11 Tf 45 470 Td (Test Case 3: Warehouse Login Sends OTP) Tj ET
+BT /F1 9 Tf 57 454 Td (Preconditions: Warehouse account exists) Tj ET
+BT /F1 9 Tf 57 440 Td (Test Steps: 1. Enter valid login and password; 2. Submit login request) Tj ET
+BT /F1 9 Tf 57 426 Td (Expected Results: OTP is sent to warehouse email and no token is created yet) Tj ET
+BT /F1 9 Tf 57 412 Td (Actual Results: OTP sent successfully) Tj ET
+BT /F2 9 Tf 57 398 Td (Status: Pass) Tj ET
+BT /F2 11 Tf 45 382 Td (Test Case 4: Verify Pharmacy OTP) Tj ET
+BT /F1 9 Tf 57 366 Td (Preconditions: OTP was sent to pharmacy email) Tj ET
+BT /F1 9 Tf 57 352 Td (Test Steps: 1. Enter valid OTP; 2. Submit verify request) Tj ET
+BT /F1 9 Tf 57 338 Td (Expected Results: Pharmacy token is generated) Tj ET
+BT /F1 9 Tf 57 324 Td (Actual Results: Token returned successfully) Tj ET
+BT /F2 9 Tf 57 310 Td (Status: Pass) Tj ET
+BT /F2 11 Tf 45 294 Td (Test Case 5: Verify Warehouse OTP) Tj ET
+BT /F1 9 Tf 57 278 Td (Preconditions: OTP was sent to warehouse email) Tj ET
+BT /F1 9 Tf 57 264 Td (Test Steps: 1. Enter valid OTP; 2. Submit verify request) Tj ET
+BT /F1 9 Tf 57 250 Td (Expected Results: Warehouse token is generated) Tj ET
+BT /F1 9 Tf 57 236 Td (Actual Results: Token returned successfully) Tj ET
+BT /F2 9 Tf 57 222 Td (Status: Pass) Tj ET
+BT /F2 11 Tf 45 206 Td (Test Case 6: Invalid OTP Verification) Tj ET
+BT /F1 9 Tf 57 190 Td (Preconditions: OTP was sent) Tj ET
+BT /F1 9 Tf 57 176 Td (Test Steps: 1. Enter wrong OTP; 2. Submit verify request) Tj ET
+BT /F1 9 Tf 57 162 Td (Expected Results: Error message is returned and token is not created) Tj ET
+BT /F1 9 Tf 57 148 Td (Actual Results: Error displayed correctly) Tj ET
+BT /F2 9 Tf 57 134 Td (Status: Pass) Tj ET
+BT /F2 11 Tf 45 118 Td (Test Case 7: Change Password) Tj ET
+BT /F1 9 Tf 57 102 Td (Preconditions: User is authenticated) Tj ET
+BT /F1 9 Tf 57 88 Td (Test Steps: 1. Enter old password; 2. Enter new password; 3. Confirm new password) Tj ET
+BT /F1 9 Tf 57 74 Td (Expected Results: Password is changed successfully) Tj ET
+BT /F1 9 Tf 57 60 Td (Actual Results: Password updated successfully) Tj ET
+endstream
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 5 0 R >>
+endobj
+7 0 obj
+<< /Length 3557 >>
+stream
+BT /F2 9 Tf 57 790 Td (Status: Pass) Tj ET
+BT /F1 8 Tf 45 774 Td () Tj ET
+BT /F2 14 Tf 45 766 Td (9.5.2 Admin Management) Tj ET
+BT /F1 10 Tf 45 746 Td (This section verifies the admin functionalities for managing pharmacies, warehouses, admins,) Tj ET
+BT /F1 10 Tf 45 732 Td (and system reports.) Tj ET
+BT /F1 8 Tf 45 718 Td () Tj ET
+BT /F2 11 Tf 45 710 Td (Test Case 8: Create Pharmacy) Tj ET
+BT /F1 9 Tf 57 694 Td (Preconditions: Admin is authenticated) Tj ET
+BT /F1 9 Tf 57 680 Td (Test Steps: 1. Send pharmacy data; 2. Submit create request) Tj ET
+BT /F1 9 Tf 57 666 Td (Expected Results: Pharmacy account is created) Tj ET
+BT /F1 9 Tf 57 652 Td (Actual Results: Pharmacy created successfully) Tj ET
+BT /F2 9 Tf 57 638 Td (Status: Pass) Tj ET
+BT /F2 11 Tf 45 622 Td (Test Case 9: Create Warehouse) Tj ET
+BT /F1 9 Tf 57 606 Td (Preconditions: Admin is authenticated) Tj ET
+BT /F1 9 Tf 57 592 Td (Test Steps: 1. Send warehouse data; 2. Submit create request) Tj ET
+BT /F1 9 Tf 57 578 Td (Expected Results: Warehouse account is created) Tj ET
+BT /F1 9 Tf 57 564 Td (Actual Results: Warehouse created successfully) Tj ET
+BT /F2 9 Tf 57 550 Td (Status: Pass) Tj ET
+BT /F2 11 Tf 45 534 Td (Test Case 10: View Pharmacies) Tj ET
+BT /F1 9 Tf 57 518 Td (Preconditions: Admin is authenticated) Tj ET
+BT /F1 9 Tf 57 504 Td (Test Steps: 1. Send GET pharmacies request) Tj ET
+BT /F1 9 Tf 57 490 Td (Expected Results: List of pharmacies is returned) Tj ET
+BT /F1 9 Tf 57 476 Td (Actual Results: Pharmacies retrieved successfully) Tj ET
+BT /F2 9 Tf 57 462 Td (Status: Pass) Tj ET
+BT /F2 11 Tf 45 446 Td (Test Case 11: View Warehouses) Tj ET
+BT /F1 9 Tf 57 430 Td (Preconditions: Admin is authenticated) Tj ET
+BT /F1 9 Tf 57 416 Td (Test Steps: 1. Send GET warehouses request) Tj ET
+BT /F1 9 Tf 57 402 Td (Expected Results: List of warehouses is returned) Tj ET
+BT /F1 9 Tf 57 388 Td (Actual Results: Warehouses retrieved successfully) Tj ET
+BT /F2 9 Tf 57 374 Td (Status: Pass) Tj ET
+BT /F2 11 Tf 45 358 Td (Test Case 12: View System Reports) Tj ET
+BT /F1 9 Tf 57 342 Td (Preconditions: Admin is authenticated) Tj ET
+BT /F1 9 Tf 57 328 Td (Test Steps: 1. Request counts and regional reports) Tj ET
+BT /F1 9 Tf 57 314 Td (Expected Results: Admin receives system statistics) Tj ET
+BT /F1 9 Tf 57 300 Td (Actual Results: Reports displayed successfully) Tj ET
+BT /F2 9 Tf 57 286 Td (Status: Pass) Tj ET
+BT /F1 8 Tf 45 270 Td () Tj ET
+BT /F2 14 Tf 45 262 Td (9.5.3 Pharmacy Inventory and Orders) Tj ET
+BT /F1 10 Tf 45 242 Td (This section covers pharmacy inventory management, ordering from warehouses, and the order) Tj ET
+BT /F1 10 Tf 45 228 Td (assistant feature.) Tj ET
+BT /F1 8 Tf 45 214 Td () Tj ET
+BT /F2 11 Tf 45 206 Td (Test Case 13: Add Product to Pharmacy Inventory) Tj ET
+BT /F1 9 Tf 57 190 Td (Preconditions: Pharmacy is authenticated) Tj ET
+BT /F1 9 Tf 57 176 Td (Test Steps: 1. Enter product barcode and stock data; 2. Submit request) Tj ET
+BT /F1 9 Tf 57 162 Td (Expected Results: Product is added to pharmacy inventory) Tj ET
+BT /F1 9 Tf 57 148 Td (Actual Results: Product saved successfully) Tj ET
+BT /F2 9 Tf 57 134 Td (Status: Pass) Tj ET
+BT /F2 11 Tf 45 118 Td (Test Case 14: View Pharmacy Inventory) Tj ET
+BT /F1 9 Tf 57 102 Td (Preconditions: Pharmacy has products) Tj ET
+BT /F1 9 Tf 57 88 Td (Test Steps: 1. Send GET inventory request) Tj ET
+BT /F1 9 Tf 57 74 Td (Expected Results: Pharmacy products are returned) Tj ET
+BT /F1 9 Tf 57 60 Td (Actual Results: Inventory displayed successfully) Tj ET
+endstream
+endobj
+8 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 7 0 R >>
+endobj
+9 0 obj
+<< /Length 3737 >>
+stream
+BT /F2 9 Tf 57 790 Td (Status: Pass) Tj ET
+BT /F2 11 Tf 45 774 Td (Test Case 15: Add Item to Order Cart) Tj ET
+BT /F1 9 Tf 57 758 Td (Preconditions: Product exists in selected warehouse) Tj ET
+BT /F1 9 Tf 57 744 Td (Test Steps: 1. Select warehouse; 2. Add product and quantity) Tj ET
+BT /F1 9 Tf 57 730 Td (Expected Results: Item is added to order cart) Tj ET
+BT /F1 9 Tf 57 716 Td (Actual Results: Cart updated successfully) Tj ET
+BT /F2 9 Tf 57 702 Td (Status: Pass) Tj ET
+BT /F2 11 Tf 45 686 Td (Test Case 16: Update Order Cart Quantity) Tj ET
+BT /F1 9 Tf 57 670 Td (Preconditions: Item exists in order cart) Tj ET
+BT /F1 9 Tf 57 656 Td (Test Steps: 1. Change item quantity; 2. Submit update request) Tj ET
+BT /F1 9 Tf 57 642 Td (Expected Results: Quantity is updated if stock is available) Tj ET
+BT /F1 9 Tf 57 628 Td (Actual Results: Quantity updated successfully) Tj ET
+BT /F2 9 Tf 57 614 Td (Status: Pass) Tj ET
+BT /F2 11 Tf 45 598 Td (Test Case 17: Checkout Order Cart) Tj ET
+BT /F1 9 Tf 57 582 Td (Preconditions: Order cart contains valid items) Tj ET
+BT /F1 9 Tf 57 568 Td (Test Steps: 1. Submit checkout request) Tj ET
+BT /F1 9 Tf 57 554 Td (Expected Results: Order is created with pending status and stock is reserved) Tj ET
+BT /F1 9 Tf 57 540 Td (Actual Results: Pending order created successfully) Tj ET
+BT /F2 9 Tf 57 526 Td (Status: Pass) Tj ET
+BT /F2 11 Tf 45 510 Td (Test Case 18: Generate Order Assistant Proposal) Tj ET
+BT /F1 9 Tf 57 494 Td (Preconditions: Pharmacy has low/out-of-stock products) Tj ET
+BT /F1 9 Tf 57 480 Td (Test Steps: 1. Request assistant proposal) Tj ET
+BT /F1 9 Tf 57 466 Td (Expected Results: System suggests medicines and selects best warehouse) Tj ET
+BT /F1 9 Tf 57 452 Td (Actual Results: Proposal generated successfully) Tj ET
+BT /F2 9 Tf 57 438 Td (Status: Pass) Tj ET
+BT /F2 11 Tf 45 422 Td (Test Case 19: Apply Order Assistant Proposal) Tj ET
+BT /F1 9 Tf 57 406 Td (Preconditions: Assistant proposal exists) Tj ET
+BT /F1 9 Tf 57 392 Td (Test Steps: 1. Submit suggested warehouse and items; 2. Apply proposal) Tj ET
+BT /F1 9 Tf 57 378 Td (Expected Results: Suggested items are added to order cart) Tj ET
+BT /F1 9 Tf 57 364 Td (Actual Results: Proposal applied successfully) Tj ET
+BT /F2 9 Tf 57 350 Td (Status: Pass) Tj ET
+BT /F1 8 Tf 45 334 Td () Tj ET
+BT /F2 14 Tf 45 326 Td (9.5.4 Warehouse Operations) Tj ET
+BT /F1 10 Tf 45 306 Td (This section verifies warehouse inventory and order processing features.) Tj ET
+BT /F1 8 Tf 45 292 Td () Tj ET
+BT /F2 11 Tf 45 284 Td (Test Case 20: Add Product to Warehouse Inventory) Tj ET
+BT /F1 9 Tf 57 268 Td (Preconditions: Warehouse is authenticated) Tj ET
+BT /F1 9 Tf 57 254 Td (Test Steps: 1. Enter product and stock data; 2. Submit request) Tj ET
+BT /F1 9 Tf 57 240 Td (Expected Results: Product is added or updated in warehouse inventory) Tj ET
+BT /F1 9 Tf 57 226 Td (Actual Results: Product saved successfully) Tj ET
+BT /F2 9 Tf 57 212 Td (Status: Pass) Tj ET
+BT /F2 11 Tf 45 196 Td (Test Case 21: View Warehouse Orders) Tj ET
+BT /F1 9 Tf 57 180 Td (Preconditions: Warehouse is authenticated) Tj ET
+BT /F1 9 Tf 57 166 Td (Test Steps: 1. Send GET warehouse orders request) Tj ET
+BT /F1 9 Tf 57 152 Td (Expected Results: All pharmacy orders for the warehouse are returned) Tj ET
+BT /F1 9 Tf 57 138 Td (Actual Results: Orders retrieved successfully) Tj ET
+BT /F2 9 Tf 57 124 Td (Status: Pass) Tj ET
+BT /F2 11 Tf 45 108 Td (Test Case 22: Approve Pharmacy Order) Tj ET
+BT /F1 9 Tf 57 92 Td (Preconditions: Pending order exists) Tj ET
+BT /F1 9 Tf 57 78 Td (Test Steps: 1. Select pending order; 2. Approve order) Tj ET
+BT /F1 9 Tf 57 64 Td (Expected Results: Order status becomes approved) Tj ET
+endstream
+endobj
+10 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 9 0 R >>
+endobj
+11 0 obj
+<< /Length 3838 >>
+stream
+BT /F1 9 Tf 57 790 Td (Actual Results: Order approved successfully) Tj ET
+BT /F2 9 Tf 57 776 Td (Status: Pass) Tj ET
+BT /F2 11 Tf 45 760 Td (Test Case 23: Reject Pharmacy Order) Tj ET
+BT /F1 9 Tf 57 744 Td (Preconditions: Pending order exists) Tj ET
+BT /F1 9 Tf 57 730 Td (Test Steps: 1. Select pending order; 2. Reject order) Tj ET
+BT /F1 9 Tf 57 716 Td (Expected Results: Order status becomes rejected and reserved stock is released) Tj ET
+BT /F1 9 Tf 57 702 Td (Actual Results: Order rejected successfully) Tj ET
+BT /F2 9 Tf 57 688 Td (Status: Pass) Tj ET
+BT /F1 8 Tf 45 672 Td () Tj ET
+BT /F2 14 Tf 45 664 Td (9.5.5 Order Receiving and Sales) Tj ET
+BT /F1 10 Tf 45 644 Td (This section covers receiving approved orders and pharmacy sales checkout behavior.) Tj ET
+BT /F1 8 Tf 45 630 Td () Tj ET
+BT /F2 11 Tf 45 622 Td (Test Case 24: Receive Approved Order) Tj ET
+BT /F1 9 Tf 57 606 Td (Preconditions: Order status is approved) Tj ET
+BT /F1 9 Tf 57 592 Td (Test Steps: 1. Pharmacy selects approved order; 2. Submit receive request) Tj ET
+BT /F1 9 Tf 57 578 Td (Expected Results: Warehouse stock decreases and pharmacy stock increases) Tj ET
+BT /F1 9 Tf 57 564 Td (Actual Results: Order received successfully) Tj ET
+BT /F2 9 Tf 57 550 Td (Status: Pass) Tj ET
+BT /F2 11 Tf 45 534 Td (Test Case 25: Add Item to Sales Cart) Tj ET
+BT /F1 9 Tf 57 518 Td (Preconditions: Product exists in pharmacy inventory) Tj ET
+BT /F1 9 Tf 57 504 Td (Test Steps: 1. Scan product barcode; 2. Add item to sales cart) Tj ET
+BT /F1 9 Tf 57 490 Td (Expected Results: Item is added if stock is available) Tj ET
+BT /F1 9 Tf 57 476 Td (Actual Results: Sales cart updated successfully) Tj ET
+BT /F2 9 Tf 57 462 Td (Status: Pass) Tj ET
+BT /F2 11 Tf 45 446 Td (Test Case 26: Checkout Sales Cart) Tj ET
+BT /F1 9 Tf 57 430 Td (Preconditions: Sales cart contains valid items) Tj ET
+BT /F1 9 Tf 57 416 Td (Test Steps: 1. Enter paid total; 2. Submit checkout) Tj ET
+BT /F1 9 Tf 57 402 Td (Expected Results: Sales invoice is created and pharmacy stock decreases) Tj ET
+BT /F1 9 Tf 57 388 Td (Actual Results: Sale recorded successfully) Tj ET
+BT /F2 9 Tf 57 374 Td (Status: Pass) Tj ET
+BT /F2 11 Tf 45 358 Td (Test Case 27: Confirm High Discount Sale) Tj ET
+BT /F1 9 Tf 57 342 Td (Preconditions: Discount is 20% or more) Tj ET
+BT /F1 9 Tf 57 328 Td (Test Steps: 1. Submit checkout; 2. Confirm discount) Tj ET
+BT /F1 9 Tf 57 314 Td (Expected Results: Sale is recorded after confirmation) Tj ET
+BT /F1 9 Tf 57 300 Td (Actual Results: High discount sale confirmed successfully) Tj ET
+BT /F2 9 Tf 57 286 Td (Status: Pass) Tj ET
+BT /F1 8 Tf 45 270 Td () Tj ET
+BT /F2 14 Tf 45 262 Td (9.5.6 Expenses, Feedback, Ratings, and Statistics) Tj ET
+BT /F1 10 Tf 45 242 Td (This section verifies supporting business features such as expenses, feedback, warehouse) Tj ET
+BT /F1 10 Tf 45 228 Td (ratings, and statistics.) Tj ET
+BT /F1 8 Tf 45 214 Td () Tj ET
+BT /F2 11 Tf 45 206 Td (Test Case 28: Create Expense Invoice) Tj ET
+BT /F1 9 Tf 57 190 Td (Preconditions: Pharmacy or warehouse is authenticated) Tj ET
+BT /F1 9 Tf 57 176 Td (Test Steps: 1. Enter amount, creator name, and description; 2. Submit request) Tj ET
+BT /F1 9 Tf 57 162 Td (Expected Results: Expense invoice is created) Tj ET
+BT /F1 9 Tf 57 148 Td (Actual Results: Expense invoice created successfully) Tj ET
+BT /F2 9 Tf 57 134 Td (Status: Pass) Tj ET
+BT /F2 11 Tf 45 118 Td (Test Case 29: Rate Warehouse) Tj ET
+BT /F1 9 Tf 57 102 Td (Preconditions: Pharmacy has received an order from warehouse) Tj ET
+BT /F1 9 Tf 57 88 Td (Test Steps: 1. Select warehouse; 2. Submit rating from 1 to 5) Tj ET
+BT /F1 9 Tf 57 74 Td (Expected Results: Rating is saved or updated and average rating changes) Tj ET
+BT /F1 9 Tf 57 60 Td (Actual Results: Warehouse rated successfully) Tj ET
+endstream
+endobj
+12 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 11 0 R >>
+endobj
+13 0 obj
+<< /Length 509 >>
+stream
+BT /F2 9 Tf 57 790 Td (Status: Pass) Tj ET
+BT /F2 11 Tf 45 774 Td (Test Case 30: View Statistics Summary) Tj ET
+BT /F1 9 Tf 57 758 Td (Preconditions: User is authenticated) Tj ET
+BT /F1 9 Tf 57 744 Td (Test Steps: 1. Request statistics summary) Tj ET
+BT /F1 9 Tf 57 730 Td (Expected Results: Revenue, expenses, and net summary are returned) Tj ET
+BT /F1 9 Tf 57 716 Td (Actual Results: Statistics displayed successfully) Tj ET
+BT /F2 9 Tf 57 702 Td (Status: Pass) Tj ET
+BT /F1 8 Tf 45 686 Td () Tj ET
+endstream
+endobj
+14 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 13 0 R >>
+endobj
+xref
+0 15
+0000000000 65535 f 
+0000000010 00000 n 
+0000000062 00000 n 
+0000000149 00000 n 
+0000000222 00000 n 
+0000000300 00000 n 
+0000004253 00000 n 
+0000004392 00000 n 
+0000008003 00000 n 
+0000008142 00000 n 
+0000011933 00000 n 
+0000012073 00000 n 
+0000015966 00000 n 
+0000016107 00000 n 
+0000016670 00000 n 
+trailer
+<< /Size 15 /Root 1 0 R >>
+startxref
+16811
+%%EOF

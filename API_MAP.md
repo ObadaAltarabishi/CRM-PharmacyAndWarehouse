@@ -61,6 +61,7 @@
 ### Feedback / Reference
 - `POST /api/pharmacy/feedback`
 - `GET /api/pharmacy/warehouses`
+- `GET /api/pharmacy/warehouses/{warehouse}/rating`
 - `POST /api/pharmacy/warehouses/{warehouse}/rating`
 - `POST /api/products` (create product)
 

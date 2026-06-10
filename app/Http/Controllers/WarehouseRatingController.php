@@ -10,6 +10,23 @@ use Illuminate\Http\JsonResponse;
 
 class WarehouseRatingController extends Controller
 {
+    public function show(Warehouse $warehouse): JsonResponse
+    {
+        $ratingsCount = WarehouseRating::query()
+            ->where('warehouse_id', $warehouse->id)
+            ->count();
+        $ratingAverage = WarehouseRating::query()
+            ->where('warehouse_id', $warehouse->id)
+            ->avg('rating');
+
+        return response()->json([
+            'warehouse_id' => $warehouse->id,
+            'warehouse_name' => $warehouse->warehouse_name,
+            'ratings_count' => $ratingsCount,
+            'rating_average' => $ratingAverage !== null ? round((float) $ratingAverage, 2) : null,
+        ]);
+    }
+
     public function store(StoreWarehouseRatingRequest $request, Warehouse $warehouse): JsonResponse
     {
         $pharmacy = $request->user();
