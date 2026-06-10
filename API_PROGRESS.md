@@ -72,6 +72,13 @@
 - **Tests Run**: `php -l app/Http/Controllers/WarehouseRatingController.php`; `php artisan route:list --path=pharmacy/warehouses`; `php artisan test` (2 passed).
 - **Open Risks**: Add feature test for unrated warehouse returning count `0` and average `null`.
 - **Next Step**: Run route checks/tests and provide Postman example.
+- **Date**: 2026-06-10
+- **Worked On**: Demo database seeding.
+- **Files Changed**: `ProductsSeeder`, `DemoDataSeeder`, `DatabaseSeeder`, API docs.
+- **Behavior Changes**: Product seeding now targets 150 openFDA products and demo seeding creates admins, pharmacies, warehouses, inventories, orders, ratings, expenses, sales invoices, and feedback.
+- **Tests Run**: `php -l` on seeders; `php artisan migrate:fresh --seed`; seeded 25 admins, 25 pharmacies, 25 warehouses, 150 products, 330 orders, 80 ratings, 750 expenses, 375 sales invoices, 25 feedbacks; `php artisan test` (2 passed).
+- **Open Risks**: Full seed depends on openFDA availability and enough returned products.
+- **Next Step**: Run `migrate:fresh --seed` and verify record counts.
 - **Date**: 2026-06-09
 - **Worked On**: Change password endpoints for admin, pharmacy, and warehouse.
 - **Files Changed**: `routes/api.php`, `PasswordController`, `ChangePasswordRequest`, API docs.
