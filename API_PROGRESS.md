@@ -27,6 +27,7 @@
 - Feedback endpoints.
 - Warehouse rating endpoint for pharmacies.
 - Stats/summary endpoints.
+- Realistic demo database seeding with openFDA products and distributed operational data.
 
 ## In Progress
 - TODO/verify: strengthen test coverage for stock-sensitive edge cases.
@@ -79,6 +80,13 @@
 - **Tests Run**: `php -l` on seeders; `php artisan migrate:fresh --seed`; seeded 25 admins, 25 pharmacies, 25 warehouses, 150 products, 330 orders, 80 ratings, 750 expenses, 375 sales invoices, 25 feedbacks; `php artisan test` (2 passed).
 - **Open Risks**: Full seed depends on openFDA availability and enough returned products.
 - **Next Step**: Run `migrate:fresh --seed` and verify record counts.
+- **Date**: 2026-06-11
+- **Worked On**: Realistic demo data cleanup and distribution.
+- **Files Changed**: `database/seeders/DemoDataSeeder.php`, API docs.
+- **Behavior Changes**: Removed placeholder `Demo...` names, added realistic admin/pharmacy/warehouse names, and ensured orders, expense invoices, sales invoices, feedback, ratings, and inventory are distributed across all 25 pharmacies and all 25 warehouses.
+- **Tests Run**: `php -l database/seeders/DemoDataSeeder.php`; `php artisan migrate:fresh --seed`; verification script confirmed 25 admins, 25 pharmacies, 25 warehouses, 150 products, 322 orders, 25 pharmacies with orders, 25 warehouses with orders, 15+ expenses per actor, 15 sales invoices per pharmacy, 80 ratings across 20 warehouses, 50 feedback records, and `0` demo names.
+- **Open Risks**: Full seed still depends on openFDA availability and rate limits.
+- **Next Step**: Keep seeded data realistic when adding new modules or reports.
 - **Date**: 2026-06-09
 - **Worked On**: Change password endpoints for admin, pharmacy, and warehouse.
 - **Files Changed**: `routes/api.php`, `PasswordController`, `ChangePasswordRequest`, API docs.

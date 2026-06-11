@@ -32,6 +32,14 @@
 - Totals and quantities are correct after create/update/delete operations.
 - Idempotency expectations for repeated actions (where applicable).
 
+## Demo Seed Data Checks
+- `php artisan migrate:fresh --seed` completes with products imported from openFDA.
+- Seeded users use realistic names, not placeholder `Demo...` labels.
+- All 25 pharmacies have orders, expense invoices, and sales invoices.
+- All 25 warehouses have incoming orders and expense invoices.
+- Ratings are attached only to warehouses that have received pharmacy orders.
+- Feedback records cover both pharmacy and warehouse operational cases.
+
 ## Warehouse Rating Checks
 - Pharmacy can rate a warehouse only after a `received` order from that warehouse.
 - Re-rating the same warehouse updates the existing pharmacy/warehouse rating instead of creating a duplicate.

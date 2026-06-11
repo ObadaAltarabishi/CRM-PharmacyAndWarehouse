@@ -26,6 +26,8 @@
 - `SalesInvoice` (+ items): finalized pharmacy sale.
 - `ExpenseInvoice`: expense tracking for pharmacy/warehouse.
 - `Feedback`: issue/feedback records.
+- `WarehouseRating`: pharmacy rating for warehouses after received orders.
+- `LoginOtp`: temporary OTP login records for pharmacy/warehouse authentication.
 
 ## Main API Role Areas
 - Admin: account/admin/pharmacy/warehouse management, counts, reports.
@@ -35,7 +37,11 @@
 ## Completed Modules (Known)
 - Admin authentication and registration.
 - Pharmacy login.
+- Pharmacy OTP login verification.
+- Pharmacy profile and password change.
 - Warehouse login.
+- Warehouse OTP login verification.
+- Warehouse profile and password change.
 - Admin management and reporting endpoints.
 - Pharmacy inventory.
 - Warehouse inventory.
@@ -45,7 +51,10 @@
 - Sales invoices.
 - Expense invoices (pharmacy and warehouse).
 - Feedback endpoints.
+- Warehouse rating endpoints.
+- Pharmacy order assistant proposal/apply flow.
 - Stats/summary endpoints.
+- Realistic seed data generation using products imported from openFDA.
 
 ## Current Areas Needing Caution
 - Stock-sensitive flows (especially concurrent updates).
@@ -63,4 +72,5 @@
 - Prefer `FormRequest` validation for new endpoints.
 - Discount rule: pharmacy sales checkout discounts `>= 20%` require confirmation.
 - Use transactions for flows that update stock and invoices together.
+- Demo seeding expects at least 150 products from openFDA before creating realistic operational data.
 - TODO/verify: identify any schema naming quirks and legacy inconsistencies before major edits.
