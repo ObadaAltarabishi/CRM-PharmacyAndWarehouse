@@ -34,15 +34,16 @@ class PharmacySalesCartController extends Controller
         $pharmacy = $request->user();
         $data = $request->validated();
         $quantity = 1;
+        $identifier = $this->salesCartItemIdentifier($data);
 
-        $product = Product::query()
-            ->where('barcode', $data['barcode'])
-            ->first();
+        $product = $this->findSalesCartProduct($data);
 
         if (!$product) {
             return response()->json([
-                'message' => 'Product not found for barcode.',
-                'barcode' => $data['barcode'],
+                'message' => isset($data['product_id'])
+                    ? 'Product not found for product_id.'
+                    : 'Product not found for barcode.',
+                ...$identifier,
             ], 404);
         }
 
@@ -54,7 +55,7 @@ class PharmacySalesCartController extends Controller
         if (!$pharmacyProduct) {
             return response()->json([
                 'message' => 'Insufficient stock in pharmacy.',
-                'barcode' => $data['barcode'],
+                ...$identifier,
             ], 422);
         }
 
@@ -71,7 +72,7 @@ class PharmacySalesCartController extends Controller
             if ($pharmacyProduct->quantity < $newQuantity) {
                 return response()->json([
                     'message' => 'Insufficient stock in pharmacy.',
-                    'barcode' => $data['barcode'],
+                    ...$identifier,
                 ], 422);
             }
 
@@ -81,7 +82,7 @@ class PharmacySalesCartController extends Controller
             if ($pharmacyProduct->quantity < $quantity) {
                 return response()->json([
                     'message' => 'Insufficient stock in pharmacy.',
-                    'barcode' => $data['barcode'],
+                    ...$identifier,
                 ], 422);
             }
 
@@ -439,6 +440,7 @@ class PharmacySalesCartController extends Controller
             $total += $lineTotal;
 
             $items[] = [
+                'product_id' => $item->product_id,
                 'barcode' => $item->product->barcode,
                 'name' => $item->product->name,
                 'strength' => $item->product->strength,
@@ -472,5 +474,25 @@ class PharmacySalesCartController extends Controller
         }
 
         return $total;
+    }
+
+    private function findSalesCartProduct(array $data): ?Product
+    {
+        if (isset($data['product_id'])) {
+            return Product::query()->find((int) $data['product_id']);
+        }
+
+        return Product::query()
+            ->where('barcode', $data['barcode'])
+            ->first();
+    }
+
+    private function salesCartItemIdentifier(array $data): array
+    {
+        if (isset($data['product_id'])) {
+            return ['product_id' => (int) $data['product_id']];
+        }
+
+        return ['barcode' => $data['barcode']];
     }
 }

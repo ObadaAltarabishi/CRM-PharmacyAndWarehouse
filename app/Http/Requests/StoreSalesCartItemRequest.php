@@ -14,7 +14,8 @@ class StoreSalesCartItemRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'barcode' => ['required', 'string', 'max:100'],
+            'barcode' => ['required_without:product_id', 'prohibits:product_id', 'string', 'max:100'],
+            'product_id' => ['required_without:barcode', 'prohibits:barcode', 'integer', 'exists:products,id'],
         ];
     }
 }

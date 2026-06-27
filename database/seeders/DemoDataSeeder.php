@@ -117,7 +117,35 @@ class DemoDataSeeder extends Seeder
             ['Al Amal Modern Pharmacy', 'Dr. Samer Al Ahmad', 'samer.alahmad.pharmacy@gmail.com', '0944000025'],
         ];
 
-        return collect($pharmacyProfiles)->map(function (array $profile, int $index) use ($regions, $admins) {
+        $pharmacyCoordinates = [
+            [33.513805, 36.276528],
+            [33.502145, 36.298912],
+            [33.519422, 36.308741],
+            [33.486921, 36.293455],
+            [33.529834, 36.289112],
+            [33.507621, 36.319845],
+            [33.489732, 36.272681],
+            [33.535118, 36.305667],
+            [33.498406, 36.334219],
+            [33.521775, 36.254803],
+            [33.474912, 36.306184],
+            [33.544203, 36.276904],
+            [33.515267, 36.345719],
+            [33.493618, 36.246557],
+            [33.527491, 36.326033],
+            [33.482746, 36.323681],
+            [33.538921, 36.293746],
+            [33.506884, 36.263591],
+            [33.469335, 36.286904],
+            [33.550214, 36.314277],
+            [33.517458, 36.235896],
+            [33.496327, 36.357412],
+            [33.462851, 36.318503],
+            [33.556731, 36.269388],
+            [33.525604, 36.360145],
+        ];
+
+        return collect($pharmacyProfiles)->map(function (array $profile, int $index) use ($regions, $admins, $pharmacyCoordinates) {
             return Pharmacy::create([
                 'pharmacy_name' => $profile[0],
                 'doctor_name' => $profile[1],
@@ -126,6 +154,8 @@ class DemoDataSeeder extends Seeder
                 'password' => self::PASSWORD,
                 'activated_at' => now()->subDays(90 - ($index % 45)),
                 'region_id' => $regions[$index % $regions->count()]->id,
+                'latitude' => $pharmacyCoordinates[$index][0],
+                'longitude' => $pharmacyCoordinates[$index][1],
                 'admin_id' => $admins[$index % $admins->count()]->id,
             ]);
         });

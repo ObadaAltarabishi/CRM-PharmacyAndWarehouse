@@ -15,6 +15,11 @@
 - `POST /api/warehouse/login/verify-otp`
 - `POST /api/warehouse/login/resend-otp`
 
+## Guest / Public
+- `GET /api/public/products/{product}/pharmacies`
+  - Optional query: `latitude`, `longitude` from the guest device location.
+  - Returns pharmacies with available stock, quantity, price, pharmacy coordinates, and `distance_km` when guest coordinates are provided.
+
 ## Shared (Authenticated)
 - Middleware: `auth:sanctum`
 - `GET /api/products/barcode/{barcode}`
@@ -34,6 +39,7 @@
 - `GET /api/pharmacies`
 - `GET /api/pharmacies/count`
 - `POST /api/pharmacies`
+  - Optional map fields: `latitude` (`-90` to `90`) and `longitude` (`-180` to `180`).
 - `DELETE /api/pharmacies/{pharmacy}`
 - `GET /api/regions/pharmacies-count`
 
@@ -91,6 +97,8 @@
 ### Sales Cart (High Risk)
 - `GET /api/pharmacy/sales-cart`
 - `POST /api/pharmacy/sales-cart/items`
+  - Body accepts either `{ "barcode": "..." }` or `{ "product_id": 123 }`.
+  - Use `product_id` when the frontend lets the pharmacist search/select medicine manually instead of scanning a barcode.
 - `PATCH /api/pharmacy/sales-cart/items/{barcode}`
 - `DELETE /api/pharmacy/sales-cart/items/{barcode}`
 - `DELETE /api/pharmacy/sales-cart`

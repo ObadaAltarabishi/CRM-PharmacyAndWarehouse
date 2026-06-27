@@ -22,6 +22,8 @@ class CreatePharmacyRequest extends FormRequest
             'doctor_email' => ['required', 'email', 'max:255', 'unique:pharmacies,doctor_email'],
             'password' => ['required', 'string', 'min:6'],
             'region_id' => ['required', 'integer', 'exists:regions,id'],
+            'latitude' => ['nullable', 'numeric', 'between:-90,90'],
+            'longitude' => ['nullable', 'numeric', 'between:-180,180'],
         ];
     }
 }

@@ -7,9 +7,11 @@
 
 ## Completed
 - Admin authentication and registration.
+- Guest medicine availability endpoint by selected product.
 - Pharmacy login.
 - Pharmacy OTP login verification.
 - Pharmacy profile endpoint.
+- Pharmacy latitude/longitude create and database support for maps.
 - Pharmacy change password endpoint.
 - Warehouse login.
 - Warehouse OTP login verification.
@@ -22,6 +24,7 @@
 - Pharmacy order assistant proposal/apply flow.
 - Warehouse order review, approval, and rejection.
 - Pharmacy sales cart and checkout flow.
+- Pharmacy sales cart manual product add by `product_id`.
 - Sales invoice endpoints.
 - Expense invoice endpoints (pharmacy and warehouse).
 - Feedback endpoints.
@@ -39,8 +42,10 @@
 - Review response consistency for error payloads in cart/checkout/order paths.
 
 ## Endpoints / Modules To Verify
+- Guest product pharmacy availability distance sorting.
 - Warehouse rating eligibility requires a received pharmacy order from the warehouse.
 - Order assistant proposal and apply-to-cart behavior.
+- Pharmacy sales cart add item by `barcode` and by `product_id`.
 - Pharmacy sales checkout confirmation path (`>= 20%` discount).
 - Stock decrementation safety across sales finalization.
 - Order approval/rejection and subsequent pharmacy-side state handling.
@@ -59,6 +64,34 @@
 - Keep this list outcome-focused; detailed rationale belongs in `DECISIONS.md`.
 
 ## Session Updates
+- **Date**: 2026-06-28
+- **Worked On**: Guest pharmacy availability by selected medicine.
+- **Files Changed**: `routes/api.php`, `PublicProductPharmacyController`, `PublicProductPharmaciesRequest`, API docs.
+- **Behavior Changes**: Added public `GET /api/public/products/{product}/pharmacies` endpoint returning pharmacies that have the selected product in stock, including quantity, price, coordinates, and optional distance sorted from nearest to farthest when guest coordinates are provided.
+- **Tests Run**: `php -l` on new PHP files; `php artisan route:list --path=public/products`; `php artisan test` (2 passed).
+- **Open Risks**: Add feature tests for distance sorting and missing/partial location validation.
+- **Next Step**: Frontend should call this endpoint after guest selects a product from search results.
+- **Date**: 2026-06-27
+- **Worked On**: Pharmacy coordinate input on creation.
+- **Files Changed**: `CreatePharmacyRequest`, `DemoDataSeeder`, API docs.
+- **Behavior Changes**: `POST /api/pharmacies` now accepts optional `latitude` and `longitude` values from the frontend and stores them on the pharmacy. Demo pharmacies also include realistic map coordinates.
+- **Tests Run**: `php -l` on changed PHP files; `php artisan test` (2 passed).
+- **Open Risks**: Add update endpoint support if coordinates should be changed after pharmacy creation.
+- **Next Step**: Frontend can send coordinates when creating pharmacies.
+- **Date**: 2026-06-27
+- **Worked On**: Pharmacy map coordinates schema support.
+- **Files Changed**: `pharmacies` migration, `Pharmacy` model, API docs.
+- **Behavior Changes**: Added nullable `latitude` and `longitude` columns to pharmacies for frontend map support. Existing create/update API behavior remains unchanged.
+- **Tests Run**: `php -l` on changed PHP files; `php artisan migrate`; `php artisan test` (2 passed).
+- **Open Risks**: Future endpoint/request work is needed if admins or pharmacies should edit coordinates through the API.
+- **Next Step**: Add coordinate input/update endpoint when frontend map workflow is ready.
+- **Date**: 2026-06-27
+- **Worked On**: Manual medicine add to pharmacy sales cart.
+- **Files Changed**: `PharmacySalesCartController`, `StoreSalesCartItemRequest`, API docs.
+- **Behavior Changes**: `POST /api/pharmacy/sales-cart/items` now accepts either `barcode` or `product_id`, so frontend search/select can add medicines to the same sales cart flow used by barcode scanning. Cart item responses now include `product_id`.
+- **Tests Run**: `php -l` on changed PHP files; `php artisan route:list --path=pharmacy/sales-cart`; `php artisan test` (2 passed).
+- **Open Risks**: Add feature tests for mutually exclusive `barcode`/`product_id` validation and stock limit behavior.
+- **Next Step**: Verify with Postman using an in-stock pharmacy product.
 - **Date**: 2026-06-07
 - **Worked On**: Warehouse ratings for pharmacies.
 - **Files Changed**: `routes/api.php`, warehouse/pharmacy rating models/controllers/requests/migration, API docs.

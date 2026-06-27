@@ -18,11 +18,15 @@ class Pharmacy extends Authenticatable
         'password',
         'activated_at',
         'region_id',
+        'latitude',
+        'longitude',
         'admin_id',
     ];
 
     protected $casts = [
         'activated_at' => 'datetime',
+        'latitude' => 'float',
+        'longitude' => 'float',
         'password' => 'hashed',
     ];
 

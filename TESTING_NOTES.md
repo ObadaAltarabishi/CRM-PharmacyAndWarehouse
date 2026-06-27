@@ -31,6 +31,8 @@
 - Actor can only access own scope/data.
 - Totals and quantities are correct after create/update/delete operations.
 - Idempotency expectations for repeated actions (where applicable).
+- Pharmacy creation stores optional `latitude` and `longitude` when provided by the frontend.
+- Guest product availability returns only pharmacies with positive stock and sorts by `distance_km` when user coordinates are provided.
 
 ## Demo Seed Data Checks
 - `php artisan migrate:fresh --seed` completes with products imported from openFDA.
@@ -53,6 +55,8 @@
 - Stock mutations that span multiple writes are wrapped in transactions.
 
 ## Sales Checkout And Order Workflow Checks
+- Sales cart item add accepts either `barcode` or `product_id`, but not both in the same request.
+- Sales cart item add by `product_id` follows the same pharmacy stock checks as barcode scanning.
 - Sales cart checkout creates invoice and updates stock atomically.
 - Discount `>= 20%` requires explicit confirmation.
 - Confirmed high-discount checkout uses expected pending values.
