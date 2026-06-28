@@ -16,6 +16,9 @@
 - `POST /api/warehouse/login/resend-otp`
 
 ## Guest / Public
+- `GET /api/public/products?query={search}`
+  - Searches public medicine catalog by name, strength, company, and form.
+  - Returns all matching products without a limit.
 - `GET /api/public/products/{product}/pharmacies`
   - Optional query: `latitude`, `longitude` from the guest device location.
   - Returns pharmacies with available stock, quantity, price, pharmacy coordinates, and `distance_km` when guest coordinates are provided.

@@ -7,6 +7,7 @@
 
 ## Completed
 - Admin authentication and registration.
+- Guest public medicine search endpoint.
 - Guest medicine availability endpoint by selected product.
 - Pharmacy login.
 - Pharmacy OTP login verification.
@@ -42,6 +43,7 @@
 - Review response consistency for error payloads in cart/checkout/order paths.
 
 ## Endpoints / Modules To Verify
+- Guest public product search returns nearby/partial matches without exposing stock.
 - Guest product pharmacy availability distance sorting.
 - Warehouse rating eligibility requires a received pharmacy order from the warehouse.
 - Order assistant proposal and apply-to-cart behavior.
@@ -64,6 +66,13 @@
 - Keep this list outcome-focused; detailed rationale belongs in `DECISIONS.md`.
 
 ## Session Updates
+- **Date**: 2026-06-28
+- **Worked On**: Guest public medicine search.
+- **Files Changed**: `routes/api.php`, `PublicProductController`, `PublicProductSearchRequest`, API docs.
+- **Behavior Changes**: Added public `GET /api/public/products?query=...` endpoint that searches products by name, strength, company, and form, returning all matching products without requiring authentication.
+- **Tests Run**: `php -l` on new PHP files; `php artisan route:list --path=public/products`; `php artisan test` (2 passed).
+- **Open Risks**: No result limit by requirement; very large product catalogs may need pagination later.
+- **Next Step**: Frontend can use this endpoint before calling pharmacy availability for the selected product.
 - **Date**: 2026-06-28
 - **Worked On**: Guest pharmacy availability by selected medicine.
 - **Files Changed**: `routes/api.php`, `PublicProductPharmacyController`, `PublicProductPharmaciesRequest`, API docs.

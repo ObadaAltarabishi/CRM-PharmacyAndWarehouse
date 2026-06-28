@@ -13,6 +13,7 @@ use App\Http\Controllers\PharmacyOrderCartController;
 use App\Http\Controllers\PharmacySalesCartController;
 use App\Http\Controllers\PharmacyStatsController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\PublicProductController;
 use App\Http\Controllers\PublicProductPharmacyController;
 use App\Http\Controllers\SalesInvoiceController;
 use App\Http\Controllers\WarehouseAuthController;
@@ -40,6 +41,7 @@ Route::post('/pharmacy/login/resend-otp', [PharmacyAuthController::class, 'resen
 Route::post('/warehouse/login', [WarehouseAuthController::class, 'login']);
 Route::post('/warehouse/login/verify-otp', [WarehouseAuthController::class, 'verifyOtp']);
 Route::post('/warehouse/login/resend-otp', [WarehouseAuthController::class, 'resendOtp']);
+Route::get('/public/products', [PublicProductController::class, 'index']);
 Route::get('/public/products/{product}/pharmacies', [PublicProductPharmacyController::class, 'index']);
 
 Route::middleware(['auth:sanctum', 'abilities:admin'])->group(function () {

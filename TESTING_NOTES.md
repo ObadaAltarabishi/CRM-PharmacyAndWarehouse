@@ -32,6 +32,7 @@
 - Totals and quantities are correct after create/update/delete operations.
 - Idempotency expectations for repeated actions (where applicable).
 - Pharmacy creation stores optional `latitude` and `longitude` when provided by the frontend.
+- Guest public product search returns product identity fields only and does not require authentication.
 - Guest product availability returns only pharmacies with positive stock and sorts by `distance_km` when user coordinates are provided.
 
 ## Demo Seed Data Checks
