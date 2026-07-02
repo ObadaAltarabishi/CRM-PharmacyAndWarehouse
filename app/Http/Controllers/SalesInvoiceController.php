@@ -178,6 +178,7 @@ class SalesInvoiceController extends Controller
             }
 
             $unitPrice = (float) $item['unit_price'];
+            $unitCost = (float) $pharmacyProduct->cost_price;
             $lineTotal = $unitPrice * (int) $item['quantity'];
             $total += $lineTotal;
 
@@ -185,6 +186,7 @@ class SalesInvoiceController extends Controller
                 'product_id' => $product->id,
                 'quantity' => (int) $item['quantity'],
                 'unit_price' => $unitPrice,
+                'unit_cost' => $unitCost,
                 'line_total' => $lineTotal,
             ];
         }

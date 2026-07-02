@@ -171,6 +171,7 @@ class PharmacyOrderCartController extends Controller
                 $warehouseProduct->save();
 
                 $unitCost = (float) $warehouseProduct->sell_price_to_pharmacy;
+                $warehouseUnitCost = (float) $warehouseProduct->cost_price;
                 $lineTotal = $unitCost * $item->quantity;
                 $total += $lineTotal;
 
@@ -179,6 +180,7 @@ class PharmacyOrderCartController extends Controller
                     'product_id' => $item->product_id,
                     'quantity' => $item->quantity,
                     'unit_cost' => $unitCost,
+                    'warehouse_unit_cost' => $warehouseUnitCost,
                     'line_total' => $lineTotal,
                 ]);
             }

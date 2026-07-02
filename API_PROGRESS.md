@@ -7,6 +7,7 @@
 
 ## Completed
 - Admin authentication and registration.
+- Admin dashboard statistics summary endpoint.
 - Guest public medicine search endpoint.
 - Guest medicine availability endpoint by selected product.
 - Pharmacy login.
@@ -18,13 +19,16 @@
 - Warehouse OTP login verification.
 - Warehouse profile endpoint.
 - Warehouse change password endpoint.
+- Warehouse dashboard statistics endpoint.
 - Admin management and reporting endpoints.
 - Pharmacy inventory endpoints.
 - Warehouse inventory endpoints.
 - Pharmacy order cart and order flow.
 - Pharmacy order assistant proposal/apply flow.
+- Pharmacy dashboard statistics endpoint.
 - Warehouse order review, approval, and rejection.
 - Pharmacy sales cart and checkout flow.
+- Sales invoice item unit cost capture for accurate net income statistics.
 - Pharmacy sales cart manual product add by `product_id`.
 - Sales invoice endpoints.
 - Expense invoice endpoints (pharmacy and warehouse).
@@ -43,6 +47,9 @@
 - Review response consistency for error payloads in cart/checkout/order paths.
 
 ## Endpoints / Modules To Verify
+- Admin stats summary totals and top-ranked lists.
+- Pharmacy dashboard stats revenue/net income/expenses/purchases and latest/top lists.
+- Warehouse dashboard stats income/net profit/expenses/cash balance and latest/top lists.
 - Guest public product search returns nearby/partial matches without exposing stock.
 - Guest product pharmacy availability distance sorting.
 - Warehouse rating eligibility requires a received pharmacy order from the warehouse.
@@ -66,6 +73,34 @@
 - Keep this list outcome-focused; detailed rationale belongs in `DECISIONS.md`.
 
 ## Session Updates
+- **Date**: 2026-07-02
+- **Worked On**: Warehouse dashboard statistics.
+- **Files Changed**: `WarehouseStatsController`, `routes/api.php`, `OrderItem`, order item cost migration, pharmacy order controllers, `DemoDataSeeder`, API docs.
+- **Behavior Changes**: Added `GET /api/warehouse/stats/dashboard` with product counts, order counts by status, income from received pharmacy orders, expenses, net profit using stored warehouse item cost, cash balance, top requested products, and latest 2 incoming orders.
+- **Tests Run**: `php -l` on changed PHP files; `php artisan migrate`; `php artisan route:list --path=warehouse/stats`; `php artisan test` (2 passed).
+- **Open Risks**: Net profit falls back to current warehouse product cost for old order items with null `warehouse_unit_cost`; reseeding/backfilling gives the most accurate historical values.
+- **Next Step**: Validate warehouse dashboard response shape with frontend.
+- **Date**: 2026-07-02
+- **Worked On**: Pharmacy dashboard statistics.
+- **Files Changed**: `PharmacyStatsController`, `routes/api.php`, API docs.
+- **Behavior Changes**: Added `GET /api/pharmacy/stats/dashboard` with order counts by status, inventory and sales invoice counts, gross income, net income using stored `unit_cost`, cash balance, expenses, purchases from received orders, top-selling products, latest 2 orders, and latest 2 sales invoices.
+- **Tests Run**: `php -l` on changed PHP files; `php artisan route:list --path=pharmacy/stats`; `php artisan test` (2 passed).
+- **Open Risks**: Net income falls back to current product cost for old invoice items with null `unit_cost`; reseeding or backfilling gives the most accurate historical values.
+- **Next Step**: Validate the response shape with frontend and then build warehouse statistics.
+- **Date**: 2026-07-02
+- **Worked On**: Accurate sales item cost tracking.
+- **Files Changed**: `sales_invoice_items` migration, `SalesInvoiceItem`, sales checkout controllers, `DemoDataSeeder`, API docs.
+- **Behavior Changes**: Sales invoice items now store `unit_cost` from the pharmacy product at sale time, enabling historically accurate net income calculations even if product cost changes later.
+- **Tests Run**: `php -l` on changed PHP files; `php artisan migrate`; `php artisan test` (2 passed).
+- **Open Risks**: Existing pre-migration sales invoice items may have `unit_cost = null`; future stats should fallback to current cost or migrate/backfill old data if needed.
+- **Next Step**: Build pharmacy dashboard statistics using `paid_total`, `unit_cost`, expenses, and received orders.
+- **Date**: 2026-07-02
+- **Worked On**: Admin dashboard statistics.
+- **Files Changed**: `routes/api.php`, `AdminStatsController`, API docs.
+- **Behavior Changes**: Added `GET /api/admin/stats/summary` for total pharmacies, warehouses, admins, feedbacks/complaints, top pharmacies by order count, top warehouses by received order count, and top rated warehouses.
+- **Tests Run**: `php -l` on changed PHP files; `php artisan route:list --path=admin/stats`; `php artisan test` (2 passed).
+- **Open Risks**: Ranking currently returns all rows sorted; add pagination/limit later if production data grows large.
+- **Next Step**: Add pharmacy and warehouse stats after confirming admin response shape.
 - **Date**: 2026-06-28
 - **Worked On**: Guest public medicine search.
 - **Files Changed**: `routes/api.php`, `PublicProductController`, `PublicProductSearchRequest`, API docs.

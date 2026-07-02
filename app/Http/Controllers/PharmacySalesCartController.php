@@ -157,6 +157,7 @@ class PharmacySalesCartController extends Controller
                     ->first();
 
                 $unitPrice = $pharmacyProduct ? (float) $pharmacyProduct->default_sell_price : 0;
+                $unitCost = $pharmacyProduct ? (float) $pharmacyProduct->cost_price : 0;
                 $lineTotal = $unitPrice * $cartItem->quantity;
                 $total += $lineTotal;
 
@@ -165,6 +166,7 @@ class PharmacySalesCartController extends Controller
                     'product_id' => $cartItem->product_id,
                     'quantity' => $cartItem->quantity,
                     'unit_price' => $unitPrice,
+                    'unit_cost' => $unitCost,
                     'line_total' => $lineTotal,
                 ]);
 
@@ -255,6 +257,7 @@ class PharmacySalesCartController extends Controller
                     ->first();
 
                 $unitPrice = $pharmacyProduct ? (float) $pharmacyProduct->default_sell_price : 0;
+                $unitCost = $pharmacyProduct ? (float) $pharmacyProduct->cost_price : 0;
                 $lineTotal = $unitPrice * $cartItem->quantity;
                 $total += $lineTotal;
 
@@ -263,6 +266,7 @@ class PharmacySalesCartController extends Controller
                     'product_id' => $cartItem->product_id,
                     'quantity' => $cartItem->quantity,
                     'unit_price' => $unitPrice,
+                    'unit_cost' => $unitCost,
                     'line_total' => $lineTotal,
                 ]);
 

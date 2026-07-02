@@ -11,6 +11,7 @@ class OrderItem extends Model
         'product_id',
         'quantity',
         'unit_cost',
+        'warehouse_unit_cost',
         'line_total',
     ];
 

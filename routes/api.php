@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminStatsController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\ExpenseInvoiceController;
 use App\Http\Controllers\PasswordController;
@@ -46,6 +47,7 @@ Route::get('/public/products/{product}/pharmacies', [PublicProductPharmacyContro
 
 Route::middleware(['auth:sanctum', 'abilities:admin'])->group(function () {
     Route::get('/admin/me', [AdminController::class, 'profile']);
+    Route::get('/admin/stats/summary', [AdminStatsController::class, 'summary']);
     Route::patch('/admin/password', [PasswordController::class, 'update']);
     Route::get('/admins', [AdminController::class, 'index']);
     Route::get('/admins/count', [AdminController::class, 'count']);
@@ -110,6 +112,7 @@ Route::middleware(['auth:sanctum', 'abilities:pharmacy'])->group(function () {
     Route::patch('/pharmacy/order-cart/items/{barcode}', [PharmacyOrderCartController::class, 'updateQuantity']);
     Route::delete('/pharmacy/order-cart', [PharmacyOrderCartController::class, 'clear']);
     Route::post('/pharmacy/order-cart/checkout', [PharmacyOrderCartController::class, 'checkout']);
+    Route::get('/pharmacy/stats/dashboard', [PharmacyStatsController::class, 'dashboard']);
     Route::get('/pharmacy/stats/summary', [PharmacyStatsController::class, 'summary']);
     Route::get('/pharmacy/expense-invoices', [ExpenseInvoiceController::class, 'index']);
     Route::get('/pharmacy/expense-invoices/{expenseInvoice}', [ExpenseInvoiceController::class, 'show']);
@@ -140,6 +143,7 @@ Route::middleware(['auth:sanctum', 'abilities:warehouse'])->group(function () {
     Route::get('/warehouse/orders/{order}', [WarehouseOrderController::class, 'show']);
     Route::post('/warehouse/orders/{order}/approve', [WarehouseOrderController::class, 'approve']);
     Route::post('/warehouse/orders/{order}/reject', [WarehouseOrderController::class, 'reject']);
+    Route::get('/warehouse/stats/dashboard', [WarehouseStatsController::class, 'dashboard']);
     Route::get('/warehouse/stats/summary', [WarehouseStatsController::class, 'summary']);
     //Route::get('/products/barcode/{barcode}', [ProductController::class, 'showByBarcode']);
     Route::post('/products', [ProductController::class, 'store']);

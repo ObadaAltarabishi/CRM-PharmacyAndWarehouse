@@ -32,6 +32,7 @@
 
 ### Profile / Admin Management
 - `GET /api/admin/me`
+- `GET /api/admin/stats/summary`
 - `PATCH /api/admin/password`
 - `GET /api/admins`
 - `GET /api/admins/count`
@@ -126,6 +127,7 @@
 - `DELETE /api/pharmacy/expense-invoices/{expenseInvoice}`
 
 ### Stats
+- `GET /api/pharmacy/stats/dashboard`
 - `GET /api/pharmacy/stats/summary`
 
 ## Warehouse Area
@@ -160,6 +162,7 @@
 - `DELETE /api/warehouse/expense-invoices/{expenseInvoice}`
 
 ### Stats
+- `GET /api/warehouse/stats/dashboard`
 - `GET /api/warehouse/stats/summary`
 
 ## Other Route

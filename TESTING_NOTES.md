@@ -31,6 +31,10 @@
 - Actor can only access own scope/data.
 - Totals and quantities are correct after create/update/delete operations.
 - Idempotency expectations for repeated actions (where applicable).
+- Admin stats summary is admin-only and returns accurate totals and sorted top lists.
+- Pharmacy dashboard stats uses `paid_total` for gross income and stored sales item `unit_cost` for net income, falling back to current product cost for older invoice items.
+- Pharmacy dashboard cash balance equals gross income minus expenses minus received-order purchases for each period.
+- Warehouse dashboard stats uses received order totals for income, stored `warehouse_unit_cost` for net profit, and income minus expenses for cash balance.
 - Pharmacy creation stores optional `latitude` and `longitude` when provided by the frontend.
 - Guest public product search returns product identity fields only and does not require authentication.
 - Guest product availability returns only pharmacies with positive stock and sorts by `distance_km` when user coordinates are provided.
@@ -59,6 +63,7 @@
 - Sales cart item add accepts either `barcode` or `product_id`, but not both in the same request.
 - Sales cart item add by `product_id` follows the same pharmacy stock checks as barcode scanning.
 - Sales cart checkout creates invoice and updates stock atomically.
+- Sales invoice items store `unit_cost` at sale time before any later product cost changes.
 - Discount `>= 20%` requires explicit confirmation.
 - Confirmed high-discount checkout uses expected pending values.
 - Order flow transitions are valid: cart -> submitted -> approved/rejected -> received/issue handling.

@@ -416,6 +416,7 @@ class DemoDataSeeder extends Seeder
                         'product_id' => $pharmacyProduct->product_id,
                         'quantity' => $quantity,
                         'unit_price' => $unitPrice,
+                        'unit_cost' => $pharmacyProduct->cost_price,
                         'line_total' => $lineTotal,
                     ]);
 
@@ -524,6 +525,7 @@ class DemoDataSeeder extends Seeder
                 'product_id' => $warehouseProduct->product_id,
                 'quantity' => $quantity,
                 'unit_cost' => $unitCost,
+                'warehouse_unit_cost' => $warehouseProduct->cost_price,
                 'line_total' => $lineTotal,
             ]);
 
